@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %} Questions {% endblock %}
+{% block content %}
+	<h2>Questions</h2>
+	<table border="1">
+		{% for question in question_list %}
+			<tr>
+				<td>{{ question.text }}</td>
+				<td>
+				{% if question.diagram != '' %}
+					<img src="{{ question.diagram.url }}">
+				{% endif %}
+				</td>
+				<td>
+				</td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

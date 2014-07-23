@@ -1,0 +1,11 @@
+{# templates/questions/upload_form.html #}
+{% extends "base.html" %}
+
+{% block title %}Upload a question{% endblock %}
+{% block content %}
+	<form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{ form }}
+		<input type="submit" value="Upload" />
+	</form>
+{% endblock %}

@@ -6,21 +6,21 @@
 		<tr>
 			<th>ID</th>
 			<th>Text</th>
-			<th>Diagram</th>
+			<th>CoreNLP Tree</th>
 			<th>Actions</th>
 		</tr>
-		{% for question in question_list %}
+		{% for deptree in deptree_list %}
 			<tr>
-				<td>{{ question.pk }}</td>
-				<td>{{ question.text }}</td>
+				<td>{{ deptree.question.pk }}</td>
+				<td>{{ deptree.question.text }}</td>
 				<td>
 				{% if question.diagram != '' %}
-					<img src="{{ question.diagram.url }}">
+					<img src="{{ deptree.corenlp_image.url }}">
 				{% endif %}
 				</td>
 				<td>
-					<a href="../update/{{ question.pk }}">update</a>
-					<a href="../delete/{{ question.pk }}">delete</a>
+					<a href="../update/{{ deptree.question.pk }}">update</a>
+					<a href="../delete/{{ deptree.question.pk }}">delete</a>
 				</td>
 			</tr>
 		{% endfor %}

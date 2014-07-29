@@ -5,10 +5,14 @@ Created on Jul 22, 2014
 '''
 
 from django.forms import ModelForm
-from deptrees.models import DepTree
+from deptrees.models import DepTree, DepTreeImage
 
 class DepTreeForm(ModelForm):
     class Meta:
         model = DepTree
-        fields = ['question', 'corenlp_image']
+        fields = ['question','parser']
         
+class DepTreeImageForm(ModelForm):
+    class Meta:
+        model = DepTreeImage
+        fields = ['image','dep_tree']

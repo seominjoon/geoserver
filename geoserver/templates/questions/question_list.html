@@ -7,6 +7,7 @@
 			<th>ID</th>
 			<th>Text</th>
 			<th>Diagram</th>
+			<th>Tags</th>
 			<th>Actions</th>
 		</tr>
 		{% for question in question_list %}
@@ -17,6 +18,11 @@
 				{% if question.diagram != '' %}
 					<img src="{{ question.diagram.url }}">
 				{% endif %}
+				</td>
+				<td>
+					{% for tag in question.tags.all %}
+					{{ tag }} 
+					{% endfor %}
 				</td>
 				<td>
 					<a href="../update/{{ question.pk }}">update</a>

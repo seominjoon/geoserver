@@ -15,7 +15,9 @@
 				<td>{{ deptree.question.text }}</td>
 				<td>
 				{% if question.diagram != '' %}
-					<img src="{{ deptree.corenlp_image.url }}">
+					{% for deptreeimage in deptree.images.all %}
+						<img src="{{ deptreeimage.image.url }}">
+					{% endfor %}
 				{% endif %}
 				</td>
 				<td>

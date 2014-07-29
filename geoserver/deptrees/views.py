@@ -4,21 +4,45 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.views.generic.list import ListView
 
-from deptrees.forms import DepTreeForm
+from deptrees.forms import DepTreeForm, DepTreeImageForm
 from deptrees.models import DepTree
 
 
 # Create your views here.
+class DepTreeImageUploadView(View):
+    def post(self, request):
+        form = DepTreeImageForm(request.POST, request.FILES)
+        print request.POST
+        if form.is_valid():
+            form.save()
+            if request.POST['html'] == 'false':
+                return HttpResponse('success')
+            else:
+                data = {'title': 'Success',
+                        'message': 'Dep tree image uploaded successfully.',
+                        'link': reverse('list'),
+                        'linkdes': 'Go to tree list page.'}
+                return render(request, 'result.html', data)
+        else:
+            if request.POST['html'] == 'false':
+                return HttpResponse('failure')
+            else:
+                data = {'title': 'Failed',
+                        'message': 'Dep tree image upload failed.',
+                        'link': reverse('image_upload'),
+                        'linkdes': 'Go back and upload the tree again.'}
+                return render(request, 'result.html', data)
+
+    def get(self, request):
+        form = DepTreeImageForm()
+        return  render(request, 'upload_form.html', {'form': form, 'title': 'Upload dep tree'})
+    
+
 class DepTreeUploadView(View):
-    '''
-    No html-based upload view exists.
-    Must be automated via a program.
-    '''
     
     def post(self, request):
-        form = DepTreeForm(request.POST, request.FILES)
+        form = DepTreeForm(request.POST)
         print request.POST
-        print request.FILES
         if form.is_valid():
             form.save()
             if request.POST['html'] == 'false':

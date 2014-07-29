@@ -13,7 +13,7 @@ import os
 
 from unipath import Path
 
-from geoserver.settings.local_private import *
+from geoserver.settings.production_private import *
 
 BASE_DIR = Path(__file__).ancestor(3)
 
@@ -65,8 +65,8 @@ DATABASES = {
         'NAME': 'geodb',
         'USER': 'root',
         'PASSWORD': GEODB_PWD,
-        'HOST': '',
-        'PORT': '',
+        'HOST': 'geodb.c9wkugy4sch4.us-west-2.rds.amazonaws.com',
+        'PORT': '3306',
     }
 }
 

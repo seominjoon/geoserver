@@ -1,4 +1,4 @@
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import ListView, DeleteView, CreateView, View
@@ -19,7 +19,10 @@ class QuestionUploadView(View):
     def post(self, request):
         form = QuestionForm(request.POST, request.FILES)
         if form.is_valid():
+            # Actions
             form.save()
+            
+            # Views
             if request.POST['html'] == 'false':
                 return HttpResponse('success')
             else:
@@ -29,6 +32,9 @@ class QuestionUploadView(View):
                         'linkdes': 'Go to question list page.'}
                 return render(request, 'result.html', data)
         else:
+            # Do nothing
+            
+            # Views
             if request.POST['html'] == 'false':
                 return HttpResponse('failure')
             else:
@@ -44,22 +50,33 @@ class QuestionUploadView(View):
 
 class QuestionDeleteView(DeleteView):
     model = Question
-    success_url = reverse_lazy('list')
+    # success_url = reverse_lazy('list') # Do I need this?
     slug_field = 'pk'
     
     def delete(self, request, *args, **kwargs):
+        # Actions
         self.object = self.get_object()
         self.object.delete()
-        data = {'title': 'Success',
-                'message': 'Question deleted successfully.',
-                'link': reverse('list'),
-                'linkdes': 'Go to question list page.',
-                }
-        return render(request, 'result.html', data)
+        
+        # Views
+        if request.POST['html'] == 'false':
+            return HttpResponse('success')
+        else:
+            data = {'title': 'Success',
+                    'message': 'Question deleted successfully.',
+                    'link': reverse('list'),
+                    'linkdes': 'Go to question list page.',
+                    }
+            return render(request, 'result.html', data)
     
 class QuestionDownloadView(View):
     '''
-    Ideally this needs to be implemented with Django REST (serilized data).
+    QuestionDownloadView is similar to QuestionListView,
+    except that download returns JSON while QuestionListView returns HTML.
+    Later, this can be combined with  QLV by examining 'html' variable of GET request.
+    
+    TO BE FIXED:
+    Ideally this needs to be implemented with Django REST (serilized JSON data).
     '''
     def get(self, request, query):
         response = ''
@@ -71,9 +88,9 @@ class QuestionDownloadView(View):
             response += "%s,,,%s,,,%s;;;" %(question.pk, question.text, question.diagram.url)
         return HttpResponse(response)
     
-class TagAddView(CreateView):
+class TagCreateView(CreateView):
     '''
-    Add a new tag
+    Create a new tag
     '''
     model = QuestionTag
     fields = ['word']

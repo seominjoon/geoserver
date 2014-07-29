@@ -12,4 +12,5 @@ from deptrees import views
 urlpatterns = patterns('',
     url(r'^upload/$', views.DepTreeUploadView.as_view(), name='upload'),
     url(r'^list/$', views.DepTreeListView.as_view(), name='list'),
+    url(r'^upload/image/$', views.DepTreeImageUploadView.as_view(), name='upload_image'),
 )

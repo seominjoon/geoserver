@@ -1,0 +1,9 @@
+'''
+DO NOT UPLOAD THIS ONLINE.
+CONTAINS PRIVATE KEYS
+'''
+
+
+SECRET_KEY = 'h10%5zh482a#s^s-ha5h_o!u2fhs)e=uz-lv)i(f5hc9-e5ci='
+AWS_SECRET_ACCESS_KEY = 'fIafUB8osLphjvRA/93+BiU7ZW9B7Hb1Lzk0XJpB'
+GEODB_PWD = 'alswns0329'

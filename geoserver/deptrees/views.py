@@ -14,9 +14,9 @@ class DepTreeImageUploadView(View):
         form = DepTreeImageForm(request.POST, request.FILES)
         print request.POST
         if form.is_valid():
-            form.save()
+            this = form.save()
             if request.POST['html'] == 'false':
-                return HttpResponse('success')
+                return HttpResponse(str(this.pk))
             else:
                 data = {'title': 'Success',
                         'message': 'Dep tree image uploaded successfully.',
@@ -25,7 +25,7 @@ class DepTreeImageUploadView(View):
                 return render(request, 'result.html', data)
         else:
             if request.POST['html'] == 'false':
-                return HttpResponse('failure')
+                return HttpResponse('-1')
             else:
                 data = {'title': 'Failed',
                         'message': 'Dep tree image upload failed.',
@@ -44,9 +44,9 @@ class DepTreeUploadView(View):
         form = DepTreeForm(request.POST)
         print request.POST
         if form.is_valid():
-            form.save()
+            this = form.save()
             if request.POST['html'] == 'false':
-                return HttpResponse('success')
+                return HttpResponse(str(this.pk))
             else:
                 data = {'title': 'Success',
                         'message': 'Dep tree uploaded successfully.',
@@ -55,7 +55,7 @@ class DepTreeUploadView(View):
                 return render(request, 'result.html', data)
         else:
             if request.POST['html'] == 'false':
-                return HttpResponse('failure')
+                return HttpResponse('-1')
             else:
                 data = {'title': 'Failed',
                         'message': 'Dep tree upload failed.',

@@ -1,4 +1,4 @@
 *.pyc
-geoserver/settings/private.py
+geoserver/geoserver/settings/PRIVATE.py
 geoserver/static/*
 geoserver/media/*

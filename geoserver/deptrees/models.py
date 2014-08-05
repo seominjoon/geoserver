@@ -39,6 +39,7 @@ class DepTree(models.Model):
     question = models.ForeignKey('questions.Question')
     parser = models.ForeignKey('deptrees.Parser', related_name='dep_trees')
     graphs_pickle = models.FileField(upload_to=get_pickle_upload_path)
+    temp = models.TextField()
     
     # Add pickle here
 

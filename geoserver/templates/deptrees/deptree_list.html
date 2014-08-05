@@ -7,6 +7,7 @@
 			<th>ID</th>
 			<th>Text</th>
 			<th>CoreNLP Tree</th>
+			<th>Temp</th>
 			<th>Actions</th>
 		</tr>
 		{% for deptree in deptree_list %}
@@ -16,9 +17,12 @@
 				<td>
 				{% if question.diagram != '' %}
 					{% for deptreeimage in deptree.images.all %}
-						<img src="{{ deptreeimage.image.url }}">
+						<img src="{{ deptreeimage.image.url }}"><br>
 					{% endfor %}
 				{% endif %}
+				</td>
+				<td>
+					{{ deptree.temp }}
 				</td>
 				<td>
 					<a href="../update/{{ deptree.question.pk }}">update</a>

@@ -13,7 +13,7 @@ import os
 
 from unipath import Path
 
-from geoserver.settings.production_private import *
+from geoserver.settings.private import *
 
 BASE_DIR = Path(__file__).ancestor(3)
 
@@ -51,7 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'geoserver.urls'
+ROOT_URLCONF = 'geoserver.urls.production'
 
 WSGI_APPLICATION = 'geoserver.wsgi.application'
 

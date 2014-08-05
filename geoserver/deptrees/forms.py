@@ -10,7 +10,7 @@ from deptrees.models import DepTree, DepTreeImage
 class DepTreeForm(ModelForm):
     class Meta:
         model = DepTree
-        fields = ['question','parser']
+        fields = ['question','parser','temp']
         
 class DepTreeImageForm(ModelForm):
     class Meta:

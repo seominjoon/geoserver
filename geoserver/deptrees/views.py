@@ -72,9 +72,7 @@ class DepTreeListView(ListView):
     model = DepTree
     context_object_name = 'deptree_list'
    
-''' 
     def get_context_data(self, **kwargs):
         context = super(DepTreeListView, self).get_context_data(**kwargs)
-        context['text'] = context['question'].text
+        context['show_img'] = 'false'
         return context
-'''

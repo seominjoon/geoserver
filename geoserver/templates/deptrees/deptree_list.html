@@ -6,23 +6,27 @@
 		<tr>
 			<th>ID</th>
 			<th>Text</th>
-			<th>CoreNLP Tree</th>
-			<th>Temp</th>
+			{% if False %}
+				<th>CoreNLP Tree</th>
+			{% endif %}
+			<th>Relations</th>
 			<th>Actions</th>
 		</tr>
 		{% for deptree in deptree_list %}
 			<tr>
 				<td>{{ deptree.question.pk }}</td>
 				<td>{{ deptree.question.text }}</td>
-				<td>
-				{% if question.diagram != '' %}
-					{% for deptreeimage in deptree.images.all %}
-						<img src="{{ deptreeimage.image.url }}"><br>
-					{% endfor %}
+				{% if False %}
+					<td>
+					{% if deptree.question.diagram != '' %}
+						{% for deptreeimage in deptree.images.all %}
+							<img src="{{ deptreeimage.image.url }}"><br>
+						{% endfor %}
+					{% endif %}
+					</td>
 				{% endif %}
-				</td>
 				<td>
-					{{ deptree.temp }}
+					{{ deptree.temp|safe }}
 				</td>
 				<td>
 					<a href="../update/{{ deptree.question.pk }}">update</a>

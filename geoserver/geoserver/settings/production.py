@@ -13,7 +13,7 @@ import os
 
 from unipath import Path
 
-from geoserver.settings.private import *
+from geoserver.settings.PRIVATE import *
 
 BASE_DIR = Path(__file__).ancestor(3)
 

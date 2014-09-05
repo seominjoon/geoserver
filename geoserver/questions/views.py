@@ -1,7 +1,10 @@
+import json
+
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic import ListView, DeleteView, CreateView, View
+from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
+    View, DetailView
 
 from questions.forms import QuestionForm
 from questions.models import Question, QuestionTag
@@ -46,7 +49,8 @@ class QuestionUploadView(View):
 
     def get(self, request):
         form = QuestionForm()
-        return  render(request, 'upload_form.html', {'form': form, 'title': 'Upload question'})
+        data = {'form': form, 'title':'Upload a question'}
+        return  render(request, 'upload_form.html', data)
 
 class QuestionDeleteView(DeleteView):
     model = Question
@@ -73,21 +77,58 @@ class QuestionDownloadView(View):
     '''
     QuestionDownloadView is similar to QuestionListView,
     except that download returns JSON while QuestionListView returns HTML.
-    Later, this can be combined with  QLV by examining 'html' variable of GET request.
-    
-    TO BE FIXED:
-    Ideally this needs to be implemented with Django REST (serilized JSON data).
     '''
     def get(self, request, query):
-        response = ''
+        
         if query == 'all':
             objects = Question.objects.all()
         else:
+            try:
+                int(query)
+            except:
+                raise Exception('query must be an integer.')
             objects = [Question.objects.get(pk=int(query))]
-        for question in objects:
-            response += "%s,,,%s,,,%s;;;" %(question.pk, question.text, question.diagram.url)
-        return HttpResponse(response)
+
+        data = [{'pk':question.pk, 'text':question.text, 
+                 'diagram_url':question.diagram.url} for question in objects]
+
+        if len(data) == 1:
+            data = data[0]
+
+        text = json.dumps(data)
+        return HttpResponse(text)
+
+class QuestionUpdateView(UpdateView):
+    model = Question
+    fields = ['text','diagram']
+    template_name_suffix = '_update_form'
+    slug_field = 'pk'
+   
+class QuestionUpdateAllView(View):
+    '''
+    This view allows user to update multiple questions at the same time
+    '''
+    def post(self, request):
+        pass
     
+    def get(self, request):
+        forms = []
+        for question in Question.objects.all():
+            form = QuestionForm(prefix=question.pk, instance=question)
+            forms.append(form)
+        data = {'title':'Update questions', 'forms':forms}
+        return render(request,'update_all_form.html', data)
+         
+        
+
+    
+class QuestionDetailView(DetailView):
+    
+    model = Question
+    context_object_name = 'question'
+    slug_field = 'pk'
+    
+        
 class TagCreateView(CreateView):
     '''
     Create a new tag

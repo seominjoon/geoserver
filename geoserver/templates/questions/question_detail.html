@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Question ID: {{ question.pk }}{% endblock %}
+{% block content %}
+	<h2>Question ID: {{ question.pk }}</h2>
+	<p><h4>Text</h4>{{ question.text }}</p>
+	<p><h4>Diagram</h4><img src="{{ question.diagram.url }}"></p>
+	<p>
+		<h4>Tags</h4>
+		<ul>
+			{% for tag in question.tags.all %}
+				<li>{{ tag }}</li>
+			{% endfor %}
+		</ul>
+	</p>
+{% endblock %}

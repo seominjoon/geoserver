@@ -39,4 +39,4 @@ class Question(models.Model):
         return str(self.pk)
     
     def get_absolute_url(self):
-        return reverse('detail', kwargs={'pk', self.pk})
+        return reverse('detail', kwargs={'slug': self.pk})

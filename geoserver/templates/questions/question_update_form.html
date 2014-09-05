@@ -1,0 +1,10 @@
+{# templates/questions/question_update.html #}
+{% extends "base.html" %}
+
+{% block title %}Update a question{% endblock %}
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Update"/>
+</form>
+{% endblock %}

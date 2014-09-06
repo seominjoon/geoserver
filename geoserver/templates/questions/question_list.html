@@ -2,6 +2,10 @@
 {% block title %} Questions {% endblock %}
 {% block content %}
 	<h2>Questions</h2>
+	<p>
+		<a href="{% url 'questions-upload' %}">Upload a question</a>
+		<a href="{% url 'questions-update_all' %}">Update all</a>
+	</p>
 	<table border="1">
 		<tr>
 			<th>ID</th>
@@ -25,8 +29,9 @@
 					{% endfor %}
 				</td>
 				<td>
-					<a href="../update/{{ question.pk }}">update</a>
-					<a href="../delete/{{ question.pk }}">delete</a>
+					<a href="{% url 'questions-detail' question.pk %}">detail</a>
+					<a href="{% url 'questions-update' question.pk %}">update</a>
+					<a href="{% url 'questions-delete' question.pk %}">delete</a>
 				</td>
 			</tr>
 		{% endfor %}

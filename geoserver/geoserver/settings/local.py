@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'questions',
     'deptrees',
+    'characters',
 )
 
 MIDDLEWARE_CLASSES = (

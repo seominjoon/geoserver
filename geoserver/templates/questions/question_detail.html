@@ -2,6 +2,11 @@
 {% block title %}Question ID: {{ question.pk }}{% endblock %}
 {% block content %}
 	<h2>Question ID: {{ question.pk }}</h2>
+	<p>
+		<a href="{% url 'questions-list' %}">Go to list</a>
+		<a href="{% url 'questions-update' question.pk %}">Update</a>
+		<a href="{% url 'questions-delete' question.pk %}">Delete</a>
+	</p>
 	<p><h4>Text</h4>{{ question.text }}</p>
 	<p><h4>Diagram</h4><img src="{{ question.diagram.url }}"></p>
 	<p>

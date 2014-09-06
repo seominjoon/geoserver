@@ -20,7 +20,7 @@ class DepTreeImageUploadView(View):
             else:
                 data = {'title': 'Success',
                         'message': 'Dep tree image uploaded successfully.',
-                        'link': reverse('list'),
+                        'link': reverse('deptrees-list'),
                         'linkdes': 'Go to tree list page.'}
                 return render(request, 'result.html', data)
         else:
@@ -29,7 +29,7 @@ class DepTreeImageUploadView(View):
             else:
                 data = {'title': 'Failed',
                         'message': 'Dep tree image upload failed.',
-                        'link': reverse('image_upload'),
+                        'link': reverse('deptrees-image_upload'),
                         'linkdes': 'Go back and upload the tree again.'}
                 return render(request, 'result.html', data)
 
@@ -50,7 +50,7 @@ class DepTreeUploadView(View):
             else:
                 data = {'title': 'Success',
                         'message': 'Dep tree uploaded successfully.',
-                        'link': reverse('list'),
+                        'link': reverse('deptrees-list'),
                         'linkdes': 'Go to tree list page.'}
                 return render(request, 'result.html', data)
         else:
@@ -59,7 +59,7 @@ class DepTreeUploadView(View):
             else:
                 data = {'title': 'Failed',
                         'message': 'Dep tree upload failed.',
-                        'link': reverse('upload'),
+                        'link': reverse('deptrees-upload'),
                         'linkdes': 'Go back and upload the tree again.'}
                 return render(request, 'result.html', data)
 

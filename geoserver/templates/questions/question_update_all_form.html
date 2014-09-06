@@ -1,0 +1,34 @@
+{# templates/upload_form.html #}
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+	<h2>{{ title }}</h2>
+	<p><a href="{% url 'questions-list' %}">Cancel</a></p>
+	<form action="" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<input type=hidden name="html" value="true" />
+		<table border=1>
+			<tr>
+				<th>ID</th>
+				<th>Text</th>
+				<th>Diagram</th>
+			</tr>
+			{% for form in forms %}
+				<tr>
+					<th>{{ form.instance.pk }}</th>
+					<th>{{ form.text }}</th>
+					<th>
+						<p><img src="{{ form.instance.diagram.url }}"></p>
+						<p>{{ form.diagram }}></p>
+						</th>
+				</tr>
+			{% endfor %}
+		</table>
+		<p>
+			<input type="submit" value="Update" />
+			<a href="{% url 'questions-list' %}">Cancel</a>
+		</p>
+	</form>
+
+{% endblock %}

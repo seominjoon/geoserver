@@ -31,7 +31,7 @@ class QuestionUploadView(View):
             else:
                 data = {'title': 'Success',
                         'message': 'Question uploaded successfully.',
-                        'link': reverse('list'),
+                        'link': reverse('questions-list'),
                         'linkdes': 'Go to question list page.'}
                 return render(request, 'result.html', data)
         else:
@@ -43,7 +43,7 @@ class QuestionUploadView(View):
             else:
                 data = {'title': 'Failed',
                         'message': 'Question upload failed.',
-                        'link': reverse('upload'),
+                        'link': reverse('questions-upload'),
                         'linkdes': 'Go back and upload the question again.'}
                 return render(request, 'result.html', data)
 
@@ -63,12 +63,12 @@ class QuestionDeleteView(DeleteView):
         self.object.delete()
         
         # Views
-        if request.POST['html'] == 'false':
+        if 'html' in request.POST and request.POST['html'] == 'false':
             return HttpResponse('success')
         else:
             data = {'title': 'Success',
                     'message': 'Question deleted successfully.',
-                    'link': reverse('list'),
+                    'link': reverse('questions-list'),
                     'linkdes': 'Go to question list page.',
                     }
             return render(request, 'result.html', data)
@@ -109,18 +109,27 @@ class QuestionUpdateAllView(View):
     This view allows user to update multiple questions at the same time
     '''
     def post(self, request):
-        pass
+        forms = [QuestionForm(request.POST, prefix=question.pk, instance=question)
+                 for question in Question.objects.all()]
+        if all([form.is_valid() for form in forms]):
+            [form.save() for form in forms]
+            data = {'title': 'Success',
+                    'message': 'Questions updated successfully.',
+                    'link': reverse('questions-list'),
+                    'linkdes': 'Go to question list page.',}
+            return render(request, 'result.html', data)
+        data = {'title': 'Failure',
+                'message': 'Question update failed.',
+                'link': reverse('questions-update_all'),
+                'linkdes': 'Go back to update-all page.',}
+        return render(request, 'result.html', data)
     
     def get(self, request):
-        forms = []
-        for question in Question.objects.all():
-            form = QuestionForm(prefix=question.pk, instance=question)
-            forms.append(form)
+        forms = [QuestionForm(prefix=question.pk, instance=question)
+                 for question in Question.objects.all()]
         data = {'title':'Update questions', 'forms':forms}
-        return render(request,'update_all_form.html', data)
-         
-        
-
+        return render(request,'questions/question_update_all_form.html', data)
+    
     
 class QuestionDetailView(DetailView):
     

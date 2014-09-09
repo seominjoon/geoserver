@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^update/(?P<query>\w+)/$', views.CharacterUpdateView.as_view(), name='characters-update'),
     url(r'^detail/(?P<slug>\d+)/$', views.CharacterDetailView.as_view(), name='characters-detail'),
     url(r'^delete/(?P<slug>\d+)/$', views.CharacterDeleteView.as_view(), name='characters-delete'),
+    url(r'^download/(?P<query>\w+)/$', views.CharacterDownloadView.as_view(), name='characters-download'),
 )

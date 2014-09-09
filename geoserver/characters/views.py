@@ -107,6 +107,31 @@ class CharacterDeleteView(DeleteView):
                     'linkdes': 'Go to character list page.',
                     }
             return render(request, 'result.html', data)
+        
+class CharacterDownloadView(View):
+    '''
+    CharacterDownloadView is similar to CharacterListView,
+    except that download returns JSON while list returns HTML.
+    '''
+    def get(self, request, query):
+        
+        if query == 'all':
+            objects = Character.objects.all()
+        else:
+            try:
+                int(query)
+            except:
+                raise Exception('query must be an integer.')
+            objects = [Character.objects.get(pk=int(query))]
+
+        data = [{'pk':character.pk, 'image_url':character.image.url, 
+                 'label':character.label} for character in objects]
+
+        if len(data) == 1:
+            data = data[0]
+
+        text = json.dumps(data)
+        return HttpResponse(text)
     
 
 class CharacterDetailView(DetailView):

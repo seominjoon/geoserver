@@ -1,4 +1,3 @@
-
 import os
 import time
 import uuid
@@ -20,7 +19,7 @@ def get_upload_path(instance, filename):
     '''
     ext = os.path.splitext(filename)[1]
     name = "character-%d-%s%s" %(round(time.time()),uuid.uuid4(),ext)
-    return os.path.join('chars', name)
+    return os.path.join('characters', name)
 
 class Character(models.Model):
     '''
@@ -36,6 +35,4 @@ class Character(models.Model):
     
     def get_absolute_url(self):
         return reverse('questions-detail', kwargs={'slug': self.pk})
-    
-    
     

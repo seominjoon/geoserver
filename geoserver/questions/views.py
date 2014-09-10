@@ -90,10 +90,8 @@ class QuestionDownloadView(View):
             objects = [Question.objects.get(pk=int(query))]
 
         data = [{'pk':question.pk, 'text':question.text, 
-                 'diagram_url':question.diagram.url} for question in objects]
-
-        if len(data) == 1:
-            data = data[0]
+                 'diagram_url': request.build_absolute_uri(question.diagram.url)} 
+                for question in objects]
 
         text = json.dumps(data)
         return HttpResponse(text)

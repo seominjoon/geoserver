@@ -124,11 +124,9 @@ class CharacterDownloadView(View):
                 raise Exception('query must be an integer.')
             objects = [Character.objects.get(pk=int(query))]
 
-        data = [{'pk':character.pk, 'image_url':character.image.url, 
+        data = [{'pk':character.pk, 
+                 'image_url': request.build_absolute_uri(character.image.url), 
                  'label':character.label} for character in objects]
-
-        if len(data) == 1:
-            data = data[0]
 
         text = json.dumps(data)
         return HttpResponse(text)

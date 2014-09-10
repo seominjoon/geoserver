@@ -5,7 +5,7 @@ Created on Jul 22, 2014
 '''
 
 from django.forms import ModelForm
-from deptrees.models import DepTree, DepTreeImage
+from geoserver.deptrees.models import DepTree, DepTreeImage
 
 class DepTreeForm(ModelForm):
     class Meta:

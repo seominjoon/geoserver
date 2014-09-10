@@ -6,7 +6,7 @@ Created on Sep 5, 2014
 
 from django.conf.urls import patterns, url
 
-from characters import views
+from geoserver.characters import views
 
 
 urlpatterns = patterns('',

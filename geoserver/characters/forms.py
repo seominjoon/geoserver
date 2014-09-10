@@ -5,7 +5,7 @@ Created on Sep 5, 2014
 '''
 from django.forms.models import ModelForm
 
-from characters.models import Character
+from geoserver.characters.models import Character
 
 
 class CharacterForm(ModelForm):

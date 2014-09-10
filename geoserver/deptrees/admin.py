@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from deptrees.models import DepTree, DepTreeImage, Parser
+from geoserver.deptrees.models import DepTree, DepTreeImage, Parser
 
 
 # Register your models here.

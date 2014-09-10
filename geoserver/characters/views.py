@@ -8,8 +8,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 from django.views.generic.list import ListView
 
-from characters.forms import CharacterForm
-from characters.models import Character
+from geoserver.characters.forms import CharacterForm
+from geoserver.characters.models import Character
 
 
 # Create your views here.

@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
 
-from questions.forms import QuestionForm
-from questions.models import Question, QuestionTag
+from geoserver.questions.forms import QuestionForm
+from geoserver.questions.models import Question, QuestionTag
 
 
 # Create your views here.

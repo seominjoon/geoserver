@@ -6,7 +6,7 @@ Created on Jul 21, 2014
 
 from django.conf.urls import patterns, url
 
-from geoserver.questions import views
+from questions import views
 
 urlpatterns = patterns('',
     url(r'^upload/$', views.QuestionUploadView.as_view(), name='questions-upload'),

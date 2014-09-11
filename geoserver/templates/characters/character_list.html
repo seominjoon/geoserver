@@ -11,6 +11,8 @@
 			<th>ID</th>
 			<th>Image</th>
 			<th>Label</th>
+			<th>Valid?</th>
+			<th>Labeled?</th>
 			<th>Tags</th>
 			<th>Actions</th>
 		</tr>
@@ -23,6 +25,8 @@
 				{% endif %}
 				</td>
 				<td>{{ character.label }}</td>
+				<td>{{ character.valid }}</td>
+				<td>{{ character.labeled }}</td>
 				<td>
 					{% for tag in character.tags.all %}
 					{{ tag }} 

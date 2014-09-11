@@ -14,6 +14,8 @@
 				<th>ID</th>
 				<th>Image</th>
 				<th>Label</th>
+				<th>Valid?</th>
+				<th>Labeled?</th>
 			</tr>
 			{% for form in forms %}
 				<tr>
@@ -23,6 +25,8 @@
 						<p>{{ form.image }}></p>
 					</th>
 					<th>{{ form.label }}</th>
+					<th>{{ form.valid }}</th>
+					<th>{{ form.labeled }}</th>
 				</tr>
 			{% endfor %}
 		</table>

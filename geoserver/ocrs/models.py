@@ -12,26 +12,16 @@ class OCRTag(models.Model):
 class OCR(models.Model):
     '''
     Each instance represents a single optical character recognizer.
-    They contain information, some in JSON format:
-    Date the OCR was added.
-    Algorithm used (string),
-    Parameters used,
-    Weights,
-    Number of trained instances for the weights,
-    LOOCV result 
-    Others can be added in future here.
     '''
     last_modified = models.DateTimeField(auto_now=True)
     
-    # JSON fields
-    algorithm = models.CharField(max_length=64)
-    parameters = models.CharField(max_length=1024)
-    weights = models.CharField(max_length=2048)
-    train_num = models.IntegerField()
-    loocv = models.FloatField()
-    
+    # name 
+    ocr = models.TextField()
+    descriptor_name = models.CharField(max_length=64)
+    learner_name = models.CharField(max_length=64)
+     
     def __unicode__(self):
-        return "%d-%s" %(self.pk, self.algorithm)
+        return "%d-%s+%s" %(self.pk, self.descriptor_name, self.learner_name)
     
     def get_absolute_url(self):
         return reverse('ocrs-detail', kwargs={'slug': self.pk})

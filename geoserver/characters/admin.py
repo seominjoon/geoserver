@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from geoserver.characters.models import Character, CharacterTag
+from characters.models import Character, CharacterTag
 
 
 # Register your models here.

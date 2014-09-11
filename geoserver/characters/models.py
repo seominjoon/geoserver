@@ -26,9 +26,12 @@ class Character(models.Model):
     Each Char contains image, label, and tags.
     Each Char can have more than one tags (thus M2M relationship).
     '''
+    
     image = models.ImageField(upload_to=get_upload_path)
     label = models.CharField(max_length=1)
     tags = models.ManyToManyField(CharacterTag)
+    labeled = models.BooleanField(default=False)
+    valid = models.BooleanField(default=True) 
     
     def __unicode__(self):
         return str(self.pk)

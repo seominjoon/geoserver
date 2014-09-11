@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
-from geoserver.geoserver import settings
+from geoserver import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'geoserver.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^ocrs/', include('ocrs.urls')),
     url(r'^characters/', include('characters.urls')),
     url(r'^questions/', include('questions.urls')),
     url(r'^deptrees/', include('deptrees.urls')),

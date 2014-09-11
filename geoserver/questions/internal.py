@@ -6,7 +6,7 @@ Created on Jul 21, 2014
 functions for updating the database
 '''
 
-from geoserver.questions.models import QuestionTag, Question
+from questions.models import QuestionTag, Question
 
 def add_question(text, imgpath, tagwords=None):
     '''

@@ -8,8 +8,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.edit import DeleteView
 from django.views.generic.list import ListView
 
-from geoserver.characters.forms import CharacterForm
-from geoserver.characters.models import Character
+from characters.forms import CharacterForm
+from characters.models import Character
 
 
 # Create your views here.
@@ -23,6 +23,7 @@ class CharacterListView(ListView):
 class CharacterUploadView(View):
     def post(self, request):
         form = CharacterForm(request.POST, request.FILES)
+        print request.POST
         if form.is_valid():
             # Actions
             form.save()
@@ -73,10 +74,15 @@ class CharacterUpdateView(View):
         return render(request, 'characters/character_update_form.html', data)
     
     def post(self, request, query):
+        characters = get_characters(query)
         forms = [CharacterForm(request.POST, prefix=character.pk, instance=character)
-                 for character in get_characters(query)]
+                 for character in characters]
         if all([form.is_valid() for form in forms]):
-            [form.save() for form in forms]
+            for form in forms: form.save()
+            for character in characters:
+                if len(character.label) > 0:
+                    character.labeled = True
+                    character.save()
             data = {'title': 'Success',
                     'message': 'Characters updated successfully.',
                     'link': reverse('characters-list'),
@@ -126,7 +132,10 @@ class CharacterDownloadView(View):
 
         data = [{'pk':character.pk, 
                  'image_url': request.build_absolute_uri(character.image.url), 
-                 'label':character.label} for character in objects]
+                 'label': character.label,
+                 'valid': character.valid,
+                 'labeled': character.labeled,
+                 } for character in objects]
 
         text = json.dumps(data)
         return HttpResponse(text)

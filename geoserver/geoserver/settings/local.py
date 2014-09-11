@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'questions',
     'deptrees',
     'characters',
+    'ocrs',
 )
 
 MIDDLEWARE_CLASSES = (

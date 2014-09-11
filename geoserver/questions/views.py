@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
 
-from geoserver.questions.forms import QuestionForm
-from geoserver.questions.models import Question, QuestionTag
+from questions.forms import QuestionForm
+from questions.models import Question, QuestionTag
 
 
 # Create your views here.
@@ -110,7 +110,8 @@ class QuestionUpdateAllView(View):
         forms = [QuestionForm(request.POST, prefix=question.pk, instance=question)
                  for question in Question.objects.all()]
         if all([form.is_valid() for form in forms]):
-            [form.save() for form in forms]
+            for form in forms:
+                form.save()
             data = {'title': 'Success',
                     'message': 'Questions updated successfully.',
                     'link': reverse('questions-list'),

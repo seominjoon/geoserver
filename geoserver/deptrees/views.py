@@ -4,8 +4,8 @@ from django.shortcuts import render
 from django.views.generic import View
 from django.views.generic.list import ListView
 
-from geoserver.deptrees.forms import DepTreeForm, DepTreeImageForm
-from geoserver.deptrees.models import DepTree
+from deptrees.forms import DepTreeForm, DepTreeImageForm
+from deptrees.models import DepTree
 
 
 # Create your views here.

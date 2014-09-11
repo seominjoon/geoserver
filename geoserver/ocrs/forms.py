@@ -12,4 +12,4 @@ from ocrs.models import OCR
 class OCRForm(ModelForm):
     class Meta:
         model = OCR
-        fields = ['ocr', 'learner_name', 'descriptor_name']
+        fields = ['ocr_pickle', 'learner_name', 'descriptor_name']

@@ -1,3 +1,7 @@
+import os
+import time
+import uuid
+
 from django.core.urlresolvers import reverse
 from django.db import models
 
@@ -8,6 +12,14 @@ class OCRTag(models.Model):
     
     def __unicode__(self):
         return self.word
+
+def get_upload_path(instance, filename):
+    '''
+    Upload path function for Question model
+    '''
+    ext = os.path.splitext(filename)[1]
+    name = "ocr-%d-%s%s" %(round(time.time()),uuid.uuid4(), ext)
+    return os.path.join('ocrs', name)
     
 class OCR(models.Model):
     '''
@@ -16,7 +28,7 @@ class OCR(models.Model):
     last_modified = models.DateTimeField(auto_now=True)
     
     # name 
-    ocr = models.TextField()
+    ocr_pickle = models.FileField(upload_to=get_upload_path)
     descriptor_name = models.CharField(max_length=64)
     learner_name = models.CharField(max_length=64)
      

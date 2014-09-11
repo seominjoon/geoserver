@@ -10,5 +10,5 @@ from ocrs import views
 
 urlpatterns = patterns('',
     url(r'^upload/$', views.OCRUploadView.as_view(), name='ocrs-upload'),
-    url(r'^download/(?P<query>\d+)/$', views.OCRDownloadView.as_view(), name='ocrs-download'),
+    url(r'^download/(?P<pk>\d+)/$', views.OCRDownloadView.as_view(), name='ocrs-download'),
 )

@@ -1,3 +1,5 @@
+import json
+
 from django.http.response import HttpResponse
 from django.shortcuts import render
 from django.views.generic.base import View
@@ -29,5 +31,7 @@ class OCRDownloadView(View):
     def get(self, request, pk):
         
         ocr = OCR.objects.get(pk=int(pk))
-
-        return HttpResponse(ocr.ocr)
+        ocr_url = request.build_absolute_uri(ocr.ocr_pickle.url)
+        data = {'ocr_url':ocr_url}
+        text = json.dumps(data)
+        return HttpResponse(text)

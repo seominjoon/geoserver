@@ -2,8 +2,11 @@ import os
 import time
 import uuid
 
+from PIL import Image
 from django.core.urlresolvers import reverse
 from django.db import models
+
+import geoserver.utils
 
 
 # Create your models here.
@@ -28,6 +31,7 @@ class Character(models.Model):
     '''
     
     image = models.ImageField(upload_to=get_upload_path)
+    neutral_image = models.ImageField(upload_to=get_upload_path)
     label = models.CharField(max_length=1)
     tags = models.ManyToManyField(CharacterTag)
     labeled = models.BooleanField(default=False)
@@ -39,3 +43,6 @@ class Character(models.Model):
     def get_absolute_url(self):
         return reverse('questions-detail', kwargs={'slug': self.pk})
     
+    def neutralize_image(self, ext='.png'):
+        f = geoserver.utils.neutralize_image(self.image)
+        self.neutral_image.save(f.name, f)

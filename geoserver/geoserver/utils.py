@@ -13,4 +13,5 @@ def neutralize_image(fh, ext='.png'):
     num, filepath= tempfile.mkstemp(suffix=ext)
     image = Image.open(fh)
     image.save(filepath)
+    fh.close()
     return File(open(filepath))

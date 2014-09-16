@@ -5,8 +5,17 @@ import uuid
 from django.core.urlresolvers import reverse
 from django.db import models
 
+from picklefield.fields import PickledObjectField
+from modeldict import ModelDict
+
 
 # Create your models here.
+class Variable(models.Model):
+    key = models.CharField(max_length=32)
+    value = models.CharField(max_length=256)
+    
+variables = ModelDict(Variable, key='key', value='value', instances=False)
+
 class OCRTag(models.Model):
     word = models.CharField(max_length=16)
     
@@ -29,6 +38,7 @@ class OCR(models.Model):
     
     # name 
     ocr_pickle = models.FileField(upload_to=get_upload_path)
+    ocr_manager = PickledObjectField() # OCRManager from tinyocr
     descriptor_name = models.CharField(max_length=64)
     learner_name = models.CharField(max_length=64)
      

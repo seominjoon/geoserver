@@ -3,10 +3,11 @@ import time
 import uuid
 
 from PIL import Image
+from django.core.files.base import File
 from django.core.urlresolvers import reverse
 from django.db import models
 
-import geoserver.utils
+import tinyocr.utils
 
 
 # Create your models here.
@@ -44,5 +45,8 @@ class Character(models.Model):
         return reverse('questions-detail', kwargs={'slug': self.pk})
     
     def neutralize_image(self, ext='.png'):
-        f = geoserver.utils.neutralize_image(self.image)
-        self.neutral_image.save(f.name, f)
+        with self.image:
+            with tinyocr.utils.neutralize_image(self.image) as f:
+                with File(f) as df:
+                    with self.neutral_image:
+                        self.neutral_image.save(df.name, df)

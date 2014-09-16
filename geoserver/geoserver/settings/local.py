@@ -103,3 +103,6 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 SECRET_KEY = 'h10%5zh482a#s^s-ha5h_o!u2fhs)e=uz-lv)i(f5hc9-e5ci='
+
+
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'

@@ -1,0 +1,16 @@
+
+{# templates/submit_form.html #}
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+	<p>
+	{{ message }}
+	</p>
+	<form action="" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<input type=hidden name="html" value="true" />
+		{{ form }}
+		<input type="submit" value="{{ button }}" />
+	</form>
+{% endblock %}

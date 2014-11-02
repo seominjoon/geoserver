@@ -14,20 +14,17 @@
 		</tr>
 		{% for deptree in deptree_list %}
 			<tr>
-				<td>{{ deptree.question.pk }}</td>
-				<td>{{ deptree.question.text }}</td>
+				<td>
+					{{ deptree.pk }}
+				</td>
+				<td>{{ deptree.text }}</td>
 				{% if True %}
 					<td>
-					{% if deptree.question.diagram != '' %}
-						{% for deptreeimage in deptree.images.all %}
-							<img src="{{ deptreeimage.image.url }}"><br>
-						{% endfor %}
-					{% endif %}
-					</td>
-				{% endif %}
-				<td>
-					{{ deptree.temp|safe }}
+					{% for deptreeimage in deptree.images.all %}
+						<img src="{{ deptreeimage.image.url }}"><br>
+					{% endfor %}
 				</td>
+				{% endif %}
 				<td>
 					<a href="../update/{{ deptree.question.pk }}">update</a>
 					<a href="../delete/{{ deptree.question.pk }}">delete</a>

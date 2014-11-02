@@ -1,11 +1,14 @@
+from django.core.files.base import File
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View
+from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 
-from deptrees.forms import DepTreeForm, DepTreeImageForm
-from deptrees.models import DepTree
+from deptrees.forms import DepTreeForm, DepTreeImageForm, DepTreeDemoForm
+from deptrees.geosolver_interface import get_graph_paths
+from deptrees.models import DepTree, DepTreeImage
 
 
 # Create your views here.
@@ -42,12 +45,12 @@ class DepTreeUploadView(View):
     
     def post(self, request):
         form = DepTreeForm(request.POST)
-        print request.POST
         if form.is_valid():
             this = form.save()
             if request.POST['html'] == 'false':
                 return HttpResponse(str(this.pk))
             else:
+                
                 data = {'title': 'Success',
                         'message': 'Dep tree uploaded successfully.',
                         'link': reverse('deptrees-list'),
@@ -76,3 +79,36 @@ class DepTreeListView(ListView):
         context = super(DepTreeListView, self).get_context_data(**kwargs)
         context['show_img'] = 'false'
         return context
+    
+    
+class DepTreeDemoView(View):
+    def post(self, request):
+        form = DepTreeDemoForm(request.POST, request.FILES)
+        if form.is_valid():
+            this = form.save()
+            print this
+            '''
+            Save image files
+            '''
+            paths = get_graph_paths(request.POST['text'])
+            for path in paths:
+                image_file = File(open(path))
+                DepTreeImage.objects.create_deptree_image(image_file, this)
+                image_file.close()
+            return redirect('deptrees-detail', slug=this.pk)
+        else:
+            data = {'title': 'Failed',
+                    'message': 'Dep tree upload failed.',
+                    'link': reverse('deptrees-upload'),
+                    'linkdes': 'Go back and upload the tree again.'}
+            return render(request, 'result.html', data)
+                
+    def get(self, request):
+        form = DepTreeDemoForm()
+        return render(request, 'upload_form.html', {'form':form, 'title':'Demo for dep tree'})
+
+class DepTreeDetailView(DetailView):
+    
+    model = DepTree
+    context_object_name = 'deptree'
+    slug_field = 'pk'

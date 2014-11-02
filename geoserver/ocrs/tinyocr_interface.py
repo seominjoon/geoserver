@@ -4,9 +4,7 @@ Created on Sep 13, 2014
 @author: minjoon
 '''
 from cPickle import UnpicklingError
-import numpy
 
-import cv2
 from tinyocr.ocr_manager import OCRManager
 from tinyocr.utils import cv2_file_to_array
 

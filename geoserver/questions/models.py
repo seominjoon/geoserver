@@ -15,6 +15,16 @@ class QuestionTag(models.Model):
     
     def __unicode__(self):
         return self.word
+    
+class Choice(models.Model):
+    '''
+    Each choice corresponds to one question.
+    Each question can have multiple choices.
+    Number is the choice number (e.g. 1 through 5)
+    '''
+    text = models.CharField(max_length=32)
+    number = models.IntegerField()
+    question = models.ForeignKey('questions.Question', related_name='choices')
 
 
 def get_upload_path(instance, filename):
@@ -30,14 +40,33 @@ class Question(models.Model):
     Each question contains text and diagram image.
     Each question is tagged for filtering purpose.
     Each question can have more than one tags (thus M2M relationship).
+    Each question has several choices (see Choice class).
     '''
     text = models.TextField()
     diagram = models.ImageField(upload_to=get_upload_path)
-    tags = models.ManyToManyField(QuestionTag)
+    has_choices = models.BooleanField(default=True, blank=True)
+    valid = models.BooleanField(default=True, blank=True)
+    answer = models.FloatField(null=True, blank=True)
+    tags = models.ManyToManyField(QuestionTag, blank=True)
     
     def __unicode__(self):
         return str(self.pk)
     
     def get_absolute_url(self):
         return reverse('questions-detail', kwargs={'slug': self.pk})
+    
+    def repr(self, request=None):
+        choices = dict([(choice.number,choice.text) for choice in self.choices.all()])
+        if request is None:
+            diagram_url = self.diagram.url
+        else:
+            diagram_url = request.build_absolute_uri(self.diagram.url)
+        return {'pk': self.pk,
+                'text': self.text,
+                'diagram_url': diagram_url,
+                'has_choices': self.has_choices,
+                'valid': self.valid,
+                'answer': self.answer,
+                'choices': choices,
+                }
 

@@ -2,6 +2,7 @@ import json
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from django.http.response import JsonResponse
 from django.shortcuts import render
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
@@ -89,12 +90,8 @@ class QuestionDownloadView(View):
                 raise Exception('query must be an integer.')
             objects = [Question.objects.get(pk=int(query))]
 
-        data = [{'pk':question.pk, 'text':question.text, 
-                 'diagram_url': request.build_absolute_uri(question.diagram.url)} 
-                for question in objects]
-
-        text = json.dumps(data)
-        return HttpResponse(text)
+        data = [question.repr(request) for question in objects]
+        return JsonResponse(data, safe=False)
 
 class QuestionUpdateView(UpdateView):
     model = Question

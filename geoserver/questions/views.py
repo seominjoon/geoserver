@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
 
-from questions.forms import QuestionForm
+from questions.forms import QuestionForm, ChoiceForm
 from questions.models import Question, QuestionTag
 
 
@@ -24,11 +24,11 @@ class QuestionUploadView(View):
         form = QuestionForm(request.POST, request.FILES)
         if form.is_valid():
             # Actions
-            form.save()
+            this = form.save()
             
             # Views
             if request.POST['html'] == 'false':
-                return HttpResponse('success')
+                return HttpResponse(str(this.pk))
             else:
                 data = {'title': 'Success',
                         'message': 'Question uploaded successfully.',
@@ -40,7 +40,7 @@ class QuestionUploadView(View):
             
             # Views
             if request.POST['html'] == 'false':
-                return HttpResponse('failure')
+                return HttpResponse('-1')
             else:
                 data = {'title': 'Failed',
                         'message': 'Question upload failed.',
@@ -52,6 +52,20 @@ class QuestionUploadView(View):
         form = QuestionForm()
         data = {'form': form, 'title':'Upload a question'}
         return  render(request, 'upload_form.html', data)
+
+class ChoiceUploadView(View):
+    def post(self, request):
+        form = ChoiceForm(request.POST, request.FILES)
+        print request.POST
+        if form.is_valid():
+            this = form.save()
+            return HttpResponse(str(this.pk))
+        else:
+            return HttpResponse('-1')
+
+    def get(self, request):
+        form = ChoiceForm()
+        return  render(request, 'upload_form.html', {'form': form, 'title': 'Upload choice'})
 
 class QuestionDeleteView(DeleteView):
     model = Question
@@ -95,7 +109,7 @@ class QuestionDownloadView(View):
 
 class QuestionUpdateView(UpdateView):
     model = Question
-    fields = ['text','diagram']
+    fields = ['text','diagram','valid','has_choices','answer']
     template_name_suffix = '_update_form'
     slug_field = 'pk'
    

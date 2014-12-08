@@ -22,7 +22,7 @@ class Choice(models.Model):
     Each question can have multiple choices.
     Number is the choice number (e.g. 1 through 5)
     '''
-    text = models.CharField(max_length=32)
+    text = models.TextField()
     number = models.IntegerField()
     question = models.ForeignKey('questions.Question', related_name='choices')
 

@@ -13,15 +13,29 @@
 				<th>ID</th>
 				<th>Text</th>
 				<th>Diagram</th>
+				<th>Choices</th>
+				<th>Valid?</th>
+				<th>Has choices?</th>
+				<th>Answer</th>
 			</tr>
 			{% for form in forms %}
 				<tr>
-					<th>{{ form.instance.pk }}</th>
-					<th>{{ form.text }}</th>
-					<th>
+					<td>{{ form.instance.pk }}</th>
+					<td>{{ form.text }}</th>
+					<td>
 						<p><img src="{{ form.instance.diagram.url }}"></p>
 						<p>{{ form.diagram }}></p>
-						</th>
+					</th>
+					<td>
+						<ol>
+						{% for choice in form.instance.choices.all %}
+							<li>{{ choice.text }}</li>	
+						{% endfor %}
+						</ol>
+					</th>
+					<td>{{ form.valid }}</th>
+					<td>{{ form.has_choices }}</th>
+					<td>{{ form.answer }}</th>
 				</tr>
 			{% endfor %}
 		</table>

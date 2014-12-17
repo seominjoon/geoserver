@@ -25,6 +25,9 @@ class Choice(models.Model):
     text = models.TextField()
     number = models.IntegerField()
     question = models.ForeignKey('questions.Question', related_name='choices')
+    
+    def __unicode__(self):
+        return "%d-%d" %(self.question.pk, self.number)
 
 
 def get_upload_path(instance, filename):

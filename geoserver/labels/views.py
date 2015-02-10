@@ -1,13 +1,8 @@
 import json
-import tempfile
-import cv2
 from django.core.files import File
 from django.core.urlresolvers import reverse
-from django.db.models.fields.files import FieldFile
 from django.shortcuts import render
-
-# Create your views here.
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, UpdateView
 from geosolver.utils import save_image, open_image_from_file
 from labels.forms import LabelForm
 from labels.geosolver_interface import get_labeled_image
@@ -27,14 +22,13 @@ class LabelCreateView(View):
             # Do some processing on the image
             _, filepath = save_image(new_image)
             ff = File(open(filepath, 'rb'))
-            print(ff)
             label = Label(question=question, text=form.cleaned_data['text'], image=ff)
             label.save()
-            print(label.image)
+            kwargs = {'slug': str(int(slug)+1)}
             data = {'title': 'Success',
                     'message': 'Label creation succeeded.',
-                    'link': '',#reverse('deptrees-list'),
-                    'linkdes': 'Go to tree list page.'}
+                    'link': reverse('labels-create', kwargs=kwargs),
+                    'linkdes': 'Label the next question.'}
             return render(request, 'result.html', data)
         else:
             data = {'title': 'Failed',
@@ -49,9 +43,11 @@ class LabelCreateView(View):
         data = {'question': question, 'form': form, }
         return render(request, 'labels/labels_create.html', data)
 
+
 class LabelListView(ListView):
     '''
     Display all characters
     '''
     model = Label
     context_object_name = 'label_list'
+

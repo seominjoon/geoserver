@@ -1,11 +1,7 @@
 {% extends "base.html" %}
-{% block title %} Questions {% endblock %}
+{% block title %}Labeled Question{% endblock %}
 {% block content %}
-	<h2>Questions</h2>
-	<p>
-		<a href="{% url 'questions-upload' %}">Upload a question</a>
-		<a href="{% url 'questions-update_all' %}">Update all</a>
-	</p>
+	<h2>Labeled Questions</h2>
 	<table border="1">
 		<tr>
 			<th>ID</th>
@@ -17,38 +13,36 @@
 			<th>Tags</th>
 			<th>Actions</th>
 		</tr>
-		{% for question in question_list %}
+		{% for label in label_list %}
 			<tr>
-				<td>{{ question.pk }}</td>
-				<td>{{ question.text }}</td>
+				<td>{{ label.question.pk }}</td>
+				<td>{{ label.question.text }}</td>
 				<td>
-				{% if question.diagram != '' %}
-					<img src="{{ question.diagram.url }}">
+				{% if label.image != '' %}
+					<img src="{{ label.image.url }}">
 				{% endif %}
 				</td>
 				<td>
 					<ol>
-					{% for choice in question.choices.all %}
+					{% for choice in label.question.choices.all %}
 						<li>{{ choice.text }}</li>
 					{% endfor %}
 					</ol>
 				</td>
-				<td>{{ question.valid }}</td>
+				<td>{{ label.question.valid }}</td>
 				<td>
-				{% if question.answer %}
-					{{ question.answer }}
+				{% if label.question.answer %}
+					{{ label.question.answer }}
 				{% endif %}
 				</td>
 				<td>
-					{% for tag in question.tags.all %}
+					{% for tag in label.question.tags.all %}
 					{{ tag }} 
 					{% endfor %}
 				</td>
-				<td>
-					<a href="{% url 'questions-detail' question.pk %}">detail</a>
-					<a href="{% url 'questions-update' question.pk %}">update</a>
-					<a href="{% url 'questions-delete' question.pk %}">delete</a>
-				</td>
+                <td>
+
+                </td>
 			</tr>
 		{% endfor %}
 	</table>

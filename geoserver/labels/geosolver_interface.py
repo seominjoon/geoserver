@@ -1,4 +1,4 @@
-from geosolver.diagram.states import Label, LabeledImage
+from geosolver.diagram.states import Label, ImageLabelParse
 from geosolver.ontology.instantiator_definitions import instantiators
 
 __author__ = 'minjoon'
@@ -12,6 +12,6 @@ def get_labeled_image(image, label_array):
         type_ = label_dict['type']
         label = Label(label_string, instantiators['point'](x, y))
         labels[key] = label
-    labeled_image = LabeledImage(image, labels)
-    return labeled_image.get_labeled_image()
+    image_label_parse = ImageLabelParse(image, labels)
+    return image_label_parse.get_labeled_image()
 

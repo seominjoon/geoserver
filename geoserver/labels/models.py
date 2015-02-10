@@ -13,7 +13,10 @@ class Label(models.Model):
     '''
     Label for each question.
     '''
-    question = models.ForeignKey('questions.Question', null=True, blank=True, related_name='labels')
+    question = models.OneToOneField('questions.Question', null=True, blank=True, related_name='labels')
     text = models.TextField()
     image = models.ImageField(upload_to=get_image_upload_path)
+
+    def __unicode__(self):
+        return self.question.__unicode__()
 

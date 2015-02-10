@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'deptrees',
     'characters',
     'ocrs',
+    'labels',
 )
 
 MIDDLEWARE_CLASSES = (

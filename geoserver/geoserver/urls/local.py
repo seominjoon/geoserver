@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'geoserver.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
+    url(r'^labels/', include('labels.urls')),
     url(r'^ocrs/', include('ocrs.urls')),
     url(r'^characters/', include('characters.urls')),
     url(r'^questions/', include('questions.urls')),

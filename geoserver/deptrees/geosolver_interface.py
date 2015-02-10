@@ -6,11 +6,10 @@ Created on Oct 3, 2014
 
 from tempfile import mkdtemp
 
-from geosolver.text.deptree_parsers import CoreNLP
+from geosolver.text.syntax.parsers import stanford_parser
 
 def get_graph_paths(text):
-    corenlp = CoreNLP()
-    graphs = corenlp.get_graphs(text)
+    graphs = core_nlp.get_graphs(text)
     temp_path = mkdtemp()
     paths = CoreNLP.save_graphs(graphs, temp_path)
     return paths

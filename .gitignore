@@ -3,3 +3,4 @@ geoserver/geoserver/settings/PRIVATE.py
 geoserver/static/*
 geoserver/media/*
 geoserver/*/migrations/*
+.idea/*

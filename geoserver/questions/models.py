@@ -49,7 +49,7 @@ class Question(models.Model):
     diagram = models.ImageField(upload_to=get_upload_path)
     has_choices = models.BooleanField(default=True, blank=True)
     valid = models.BooleanField(default=True, blank=True)
-    answer = models.FloatField(null=True, blank=True)
+    answer = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(QuestionTag, blank=True)
     
     def __unicode__(self):

@@ -1,3 +1,4 @@
+import json
 import tempfile
 import cv2
 from django.core.files import File
@@ -9,19 +10,22 @@ from django.shortcuts import render
 from django.views.generic import View, ListView
 from geosolver.utils import save_image, open_image_from_file
 from labels.forms import LabelForm
+from labels.geosolver_interface import get_labeled_image
 from labels.models import Label
 from questions.models import Question
 
 class LabelCreateView(View):
 
     def post(self, request, slug):
-        question = Question.objects.get(pk=slug)
-        image = open_image_from_file(question.diagram)
-        # Do some processing on the image
-        _, filepath = save_image(image)
 
         form = LabelForm(request.POST)
         if form.is_valid():
+            question = Question.objects.get(pk=slug)
+            image = open_image_from_file(question.diagram)
+            label_array = json.loads(form.cleaned_data['text'])
+            new_image = get_labeled_image(image, label_array)
+            # Do some processing on the image
+            _, filepath = save_image(new_image)
             ff = File(open(filepath, 'rb'))
             print(ff)
             label = Label(question=question, text=form.cleaned_data['text'], image=ff)

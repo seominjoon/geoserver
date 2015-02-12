@@ -71,5 +71,7 @@ class LabelDownloadView(View):
             question = Question.objects.get(pk=int(query))
             objects = Label.objects.filter(question=question)
 
+        objects = sorted(objects, key=lambda obj: obj.question.pk)
+
         data = [label.repr() for label in objects]
         return JsonResponse(data, safe=False)

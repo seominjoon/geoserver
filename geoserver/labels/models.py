@@ -24,5 +24,8 @@ class Label(models.Model):
 
 
     def repr(self):
-        return json.loads(self.text)
+        label_data = json.loads(self.text)
+        return {'question_pk': self.question.pk,
+                'pk': self.pk,
+                'label_data': label_data}
 

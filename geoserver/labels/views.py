@@ -1,6 +1,7 @@
 import json
 from django.core.files import File
 from django.core.urlresolvers import reverse
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import View, ListView, UpdateView
 from geosolver.utils import save_image, open_image_from_file
@@ -40,7 +41,8 @@ class LabelCreateView(View):
     def get(self, request, slug):
         question = Question.objects.get(pk=slug)
         form = LabelForm()
-        data = {'question': question, 'form': form, }
+        kwargs = {'slug': str(int(slug)+1)}
+        data = {'question': question, 'form': form, 'next': reverse('labels-create', kwargs=kwargs)}
         return render(request, 'labels/labels_create.html', data)
 
 
@@ -51,3 +53,23 @@ class LabelListView(ListView):
     model = Label
     context_object_name = 'label_list'
 
+
+class LabelDownloadView(View):
+    '''
+    LabelDownloadView is similar to QuestionListView,
+    except that download returns JSON while QuestionListView returns HTML.
+    '''
+    def get(self, request, query):
+
+        if query == 'all':
+            objects = Label.objects.all()
+        else:
+            try:
+                int(query)
+            except:
+                raise Exception('query must be an integer.')
+            question = Question.objects.get(pk=int(query))
+            objects = Label.objects.filter(question=question)
+
+        data = [label.repr() for label in objects]
+        return JsonResponse(data, safe=False)

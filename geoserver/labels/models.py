@@ -1,3 +1,4 @@
+import json
 import os
 import uuid
 from django.db import models
@@ -17,6 +18,11 @@ class Label(models.Model):
     text = models.TextField()
     image = models.ImageField(upload_to=get_image_upload_path)
 
+
     def __unicode__(self):
         return self.question.__unicode__()
+
+
+    def repr(self):
+        return json.loads(self.text)
 

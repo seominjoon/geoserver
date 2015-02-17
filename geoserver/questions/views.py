@@ -1,9 +1,8 @@
-import json
-
+from operator import or_
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.http.response import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
 
@@ -18,6 +17,28 @@ class QuestionListView(ListView):
     '''
     model = Question
     context_object_name = 'question_list'
+
+    def get_queryset(self):
+        return Question.objects.filter(valid=True)
+
+
+class QuestionQueryView(ListView):
+    model = Question
+    context_object_name = 'question_list'
+
+    def get_queryset(self):
+        tag_strings = self.args[0].split('+')
+        print(tag_strings)
+        self.tags = [get_object_or_404(QuestionTag, word=tag_string) for tag_string in tag_strings]
+        generators = [Question.objects.filter(tags=tag, valid=True) for tag in self.tags]
+        questions = reduce(or_, generators[1:], generators[0])
+        return questions
+
+    def get_context_data(self, **kwargs):
+        context = super(QuestionQueryView, self).get_context_data(**kwargs)
+        context['tags'] = self.tags
+        return context
+
    
 class QuestionUploadView(View):
     def post(self, request):
@@ -109,7 +130,7 @@ class QuestionDownloadView(View):
 
 class QuestionUpdateView(UpdateView):
     model = Question
-    fields = ['text','diagram','valid','has_choices','answer']
+    fields = ['text','diagram','valid','has_choices','answer','tags']
     template_name_suffix = '_update_form'
     slug_field = 'pk'
    

@@ -1,7 +1,8 @@
 {% extends "base.html" %}
-{% block title %} Questions {% endblock %}
+
+{% block title %} Questions ({{ question_list.count }}){% endblock %}
 {% block content %}
-	<h2>Questions</h2>
+	<h2>Questions ({{ question_list.count }})</h2>
 	<p>
 		<a href="{% url 'questions-upload' %}">Upload a question</a>
 		<a href="{% url 'questions-update_all' %}">Update all</a>
@@ -9,10 +10,10 @@
 	<table border="1">
 		<tr>
 			<th>ID</th>
+            <th>Number</th>
 			<th>Text</th>
 			<th>Diagram</th>
 			<th>Choices</th>
-			<th>Valid?</th>
 			<th>Answer</th>
 			<th>Tags</th>
 			<th>Actions</th>
@@ -20,10 +21,11 @@
 		{% for question in question_list %}
 			<tr>
 				<td>{{ question.pk }}</td>
+                <td>{{ forloop.counter0 }}</td>
 				<td>{{ question.text }}</td>
 				<td>
 				{% if question.diagram != '' %}
-					<img src="{{ question.diagram.url }}">
+					<div class="item"><img src="{{ question.diagram.url }}" width="400px"></div>
 				{% endif %}
 				</td>
 				<td>
@@ -33,7 +35,6 @@
 					{% endfor %}
 					</ol>
 				</td>
-				<td>{{ question.valid }}</td>
 				<td>
 				{% if question.answer %}
 					{{ question.answer }}

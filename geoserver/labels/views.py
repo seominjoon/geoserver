@@ -8,7 +8,8 @@ from geosolver.utils import save_image, open_image_from_file
 from labels.forms import LabelForm
 from labels.geosolver_interface import get_labeled_image
 from labels.models import Label
-from questions.models import Question
+from questions.models import Question, QuestionTag
+
 
 class LabelCreateView(View):
 
@@ -52,6 +53,16 @@ class LabelListView(ListView):
     '''
     model = Label
     context_object_name = 'label_list'
+
+    def get_queryset(self):
+        '''
+        # One-time thing
+        '''
+        test_tag = QuestionTag.objects.filter(word='test')[0]
+        for label in Label.objects.all():
+            if len(label.question.tags.all()) == 0:
+                label.question.tags.add(test_tag)
+        return Label.objects.order_by('question__pk')
 
 
 class LabelDownloadView(View):

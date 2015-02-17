@@ -20,8 +20,8 @@
 			</tr>
 			{% for form in forms %}
 				<tr>
-					<td>{{ form.instance.pk }}</th>
-					<td>{{ form.text }}</th>
+					<td>{{ form.instance.pk }}</td>
+					<td>{{ form.text }}</td>
 					<td>
 						<p><img src="{{ form.instance.diagram.url }}"></p>
 						<p>{{ form.diagram }}></p>
@@ -32,10 +32,10 @@
 							<li>{{ choice.text }}</li>	
 						{% endfor %}
 						</ol>
-					</th>
-					<td>{{ form.valid }}</th>
-					<td>{{ form.has_choices }}</th>
-					<td>{{ form.answer }}</th>
+					</td>
+					<td>{{ form.valid }}</td>
+					<td>{{ form.has_choices }}</td>
+					<td>{{ form.answer }}</td>
 				</tr>
 			{% endfor %}
 		</table>

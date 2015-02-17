@@ -1,4 +1,5 @@
 from operator import or_
+import re
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.http.response import JsonResponse
@@ -11,32 +12,33 @@ from questions.models import Question, QuestionTag
 
 
 # Create your views here.
+
+def _get_tags(string):
+    tag_strings = string.split('+')
+    tags = [get_object_or_404(QuestionTag, word=tag_string) for tag_string in tag_strings]
+    return tags
+
+
+def _filter_questions(tags):
+    generators = [Question.objects.filter(tags=tag, valid=True) for tag in tags]
+    questions = reduce(or_, generators[1:], generators[0])
+    return questions
+
+
 class QuestionListView(ListView):
-    '''
-    Display all questions
-    '''
     model = Question
     context_object_name = 'question_list'
 
     def get_queryset(self):
-        return Question.objects.filter(valid=True)
-
-
-class QuestionQueryView(ListView):
-    model = Question
-    context_object_name = 'question_list'
-
-    def get_queryset(self):
-        tag_strings = self.args[0].split('+')
-        print(tag_strings)
-        self.tags = [get_object_or_404(QuestionTag, word=tag_string) for tag_string in tag_strings]
-        generators = [Question.objects.filter(tags=tag, valid=True) for tag in self.tags]
-        questions = reduce(or_, generators[1:], generators[0])
-        return questions
+        if self.kwargs['query'] == 'all':
+            return Question.objects.filter(valid=True)
+        else:
+            tags = _get_tags(self.kwargs['query'])
+            questions = _filter_questions(tags)
+            return questions
 
     def get_context_data(self, **kwargs):
-        context = super(QuestionQueryView, self).get_context_data(**kwargs)
-        context['tags'] = self.tags
+        context = super(QuestionListView, self).get_context_data(**kwargs)
         return context
 
    
@@ -118,15 +120,15 @@ class QuestionDownloadView(View):
         
         if query == 'all':
             objects = Question.objects.all()
-        else:
-            try:
-                int(query)
-            except:
-                raise Exception('query must be an integer.')
+        elif re.match(r'^\d+$', query):
             objects = [Question.objects.get(pk=int(query))]
-
+        else:
+            tags = _get_tags(query)
+            objects = _filter_questions(tags)
         data = [question.repr(request) for question in objects]
         return JsonResponse(data, safe=False)
+
+
 
 class QuestionUpdateView(UpdateView):
     model = Question

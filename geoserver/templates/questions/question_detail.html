@@ -3,7 +3,7 @@
 {% block content %}
 	<h2>Question ID: {{ question.pk }}</h2>
 	<p>
-		<a href="{% url 'questions-list' %}">Go to list</a>
+		<a href="{% url 'questions-list' query='all' %}">Go to list</a>
 		<a href="{% url 'questions-update' question.pk %}">Update</a>
 		<a href="{% url 'questions-delete' question.pk %}">Delete</a>
 	</p>

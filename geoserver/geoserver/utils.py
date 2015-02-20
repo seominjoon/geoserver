@@ -15,3 +15,16 @@ def neutralize_image(fh, ext='.png'):
     image.save(filepath)
     fh.close()
     return File(open(filepath))
+
+
+def get_next_item(model, pk, **kwargs):
+    """
+    Get the next item (from pk) in the database that satisfies kwargs.
+
+    :param model:
+    :param pk:
+    :param kwargs:
+    :return:
+    """
+    objects = model.objects.filter(pk__gt=pk, **kwargs)
+    return objects[0]

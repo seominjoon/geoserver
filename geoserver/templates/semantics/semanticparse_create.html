@@ -1,0 +1,27 @@
+{# templates/upload_form.html #}
+{% extends "base.html" %}
+
+{% block title %}Create semantic parse{% endblock %}
+{% block content %}
+    <img src="{{ question.diagram.url }}">
+    <p>{{ question.text }}</p>
+    <h3>Tags</h3>
+    <ul>
+        {% for tag in question.tags.all %}
+            <li>{{  tag }}</li>
+        {% endfor %}
+    </ul>
+    <input type="text" id="input_formula" />
+    <button id="button_add">Add</button> <br>
+
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type=hidden name="html" value="true" />
+        {{ form }}
+        <input type="submit" value="Upload" />
+    </form>
+    <a href="{{ next }}">Next</a>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

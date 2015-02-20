@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Semanic Parses{% endblock %}
+{% block content %}
+	<h2>Semantic Parses</h2>
+	<table border="1">
+		<tr>
+			<th>ID</th>
+			<th>Text</th>
+			<th>Diagram</th>
+			<th>Tags</th>
+            <th>Formulas</th>
+		</tr>
+		{% for semantic_parse in semantic_parse_list %}
+			<tr>
+				<td>{{ semantic_parse.question.pk }}</td>
+				<td>{{ semantic_parse.question.text }}</td>
+				<td>
+				{% if semantic_parse.question.diagram != '' %}
+					<img src="{{ semantic_parse.question.diagram.url }}">
+				{% endif %}
+				</td>
+				<td>
+                    <ul>
+					{% for tag in semantic_parse.question.tags.all %}
+					    <li>{{ tag }}</li>
+					{% endfor %}
+                    </ul>
+				</td>
+                <td>
+                    <ul>
+                    {% for formula in semantic_parse.text_formulas %}
+                        <li>
+                        {{ formula }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </td>
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

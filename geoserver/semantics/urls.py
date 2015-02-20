@@ -1,12 +1,12 @@
 from django.conf.urls import patterns, url
-from labels import views
+from semantics import views
 
 __author__ = 'minjoon'
 
 
 urlpatterns = patterns('',
-                       url(r'^create/(?P<slug>\d+)/$', views.LabelCreateView.as_view(), name='labels-create'),
-                       url(r'^list/$', views.LabelListView.as_view(), name='labels-list'),
-                       url(r'^download/(?P<query>\w+)/$', views.LabelDownloadView.as_view(), name='labels-download'),
+                       url(r'^create/(?P<slug>\d+)/$', views.SemanticParseCreateView.as_view(), name='semantic-parses-create'),
+                       url(r'^list/$', views.SemanticParseListView.as_view(), name='semantic-parses-list'),
+                       url(r'^download/(?P<query>\w+)/$', views.SemanticParseDownloadView.as_view(), name='semantic-parses-download'),
                        # url(r'^detail/(?P<slug>\d+)/$', views.LabelDetailView.as_view(), name='labels-detail'),
 )

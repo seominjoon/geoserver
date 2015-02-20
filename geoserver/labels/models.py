@@ -28,4 +28,3 @@ class Label(models.Model):
         return {'question_pk': self.question.pk,
                 'pk': self.pk,
                 'label_data': label_data}
-

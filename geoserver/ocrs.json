@@ -1,1 +1,0 @@
-[{"fields": {"value": "13", "key": "default_ocr_pk"}, "model": "ocrs.variable", "pk": 1}, {"fields": {"ocr_pickle": "ocrs/ocr-1415251056-1a18a320-ab0a-4246-872f-456b2d17de9d.p", "last_modified": "2014-11-06T05:17:35Z", "descriptor_name": "HOG", "learner_name": "SVM", "ocr_manager": "gAJYAAAAAC4="}, "model": "ocrs.ocr", "pk": 14}]

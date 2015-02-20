@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'characters',
     'ocrs',
     'labels',
+    'semantics',
 )
 
 MIDDLEWARE_CLASSES = (

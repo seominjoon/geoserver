@@ -13,14 +13,24 @@ from questions.models import Question, QuestionTag
 
 # Create your views here.
 
-def _get_tags(string):
-    tag_strings = string.split('+')
-    tags = [get_object_or_404(QuestionTag, word=tag_string) for tag_string in tag_strings]
-    return tags
+def _get_queries(string):
+    query_strings = string.split('+')
+    pk_queries = []
+    tag_queries = []
+    for query_string in query_strings:
+        if re.match("^\d+$", query_string):
+            pk_queries.append(query_string)
+        else:
+            tag_queries.append(get_object_or_404(QuestionTag, word=query_string))
+    return pk_queries, tag_queries
 
 
-def _filter_questions(tags):
-    generators = [Question.objects.filter(tags=tag, valid=True) for tag in tags]
+def _filter_questions(pk_queries, tag_queries):
+    generators = []
+    for pk in pk_queries:
+        generators.append(Question.objects.filter(pk=pk, valid=True))
+    for tag in tag_queries:
+        generators.append(Question.objects.filter(tags=tag, valid=True))
     questions = reduce(or_, generators[1:], generators[0])
     return questions
 
@@ -33,8 +43,8 @@ class QuestionListView(ListView):
         if self.kwargs['query'] == 'all':
             return Question.objects.filter(valid=True)
         else:
-            tags = _get_tags(self.kwargs['query'])
-            questions = _filter_questions(tags)
+            p, t = _get_queries(self.kwargs['query'])
+            questions = _filter_questions(p, t)
             return questions
 
     def get_context_data(self, **kwargs):
@@ -123,8 +133,8 @@ class QuestionDownloadView(View):
         elif re.match(r'^\d+$', query):
             objects = [Question.objects.get(pk=int(query))]
         else:
-            tags = _get_tags(query)
-            objects = _filter_questions(tags)
+            p, t = _get_queries(query)
+            objects = _filter_questions(p, t)
         data = [question.repr(request) for question in objects]
         return JsonResponse(data, safe=False)
 

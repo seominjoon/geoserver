@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
 from unipath import Path
+import os
 
 
 BASE_DIR = Path(__file__).ancestor(3)
@@ -103,6 +104,11 @@ STATIC_ROOT = BASE_DIR.child('static')
 MEDIA_ROOT = BASE_DIR.child('media')
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, "asset"),
+)
 
 SECRET_KEY = 'h10%5zh482a#s^s-ha5h_o!u2fhs)e=uz-lv)i(f5hc9-e5ci='
 

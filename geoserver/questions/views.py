@@ -38,6 +38,7 @@ def _filter_questions(pk_queries, tag_queries):
 class QuestionListView(ListView):
     model = Question
     context_object_name = 'question_list'
+    paginate_by = 20
 
     def get_queryset(self):
         if self.kwargs['query'] == 'all':

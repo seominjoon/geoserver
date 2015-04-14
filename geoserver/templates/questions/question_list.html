@@ -54,18 +54,16 @@
             {% endfor %}
         </table>
     {% if is_paginated %}
-        <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="/questions/list/all?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="/questions/list/all?page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-            </span>
-        </div>
+        <nav>
+            <ul class="pagination">
+                {% for i in page_obj.paginator.page_range %}
+                    {% if i == page_obj.number %}
+                        <li class="active"><a href="#">{{ i }}<span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                        <li><a href="{{ request.path }}?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {%  endfor %}
+            </ul>
+        </nav>
     {% endif %}
 {% endblock %}

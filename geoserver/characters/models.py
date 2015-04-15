@@ -7,7 +7,7 @@ from django.core.files.base import File
 from django.core.urlresolvers import reverse
 from django.db import models
 
-import tinyocr.utils
+# import tinyocr.utils
 
 
 # Create your models here.

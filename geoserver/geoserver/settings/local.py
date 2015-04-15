@@ -107,7 +107,7 @@ MEDIA_URL = '/media/'
 
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, "asset"),
+    os.path.join(BASE_DIR, "assets"),
 )
 
 SECRET_KEY = 'h10%5zh482a#s^s-ha5h_o!u2fhs)e=uz-lv)i(f5hc9-e5ci='

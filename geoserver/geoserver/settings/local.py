@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 from unipath import Path
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geoserver.settings.local")
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "geoserver.settings.local")
 
 BASE_DIR = Path(__file__).ancestor(3)
 

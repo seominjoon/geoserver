@@ -6,9 +6,10 @@ from django.views.generic.base import View
 
 from ocrs.forms import OCRForm, TestCharacterForm, OCRForm2, OCRCreateForm
 from ocrs.models import OCR, variables
+'''
 from ocrs.tinyocr_interface import ocr_test_model, unpickle_ocr_manager, \
     create_ocr_manager
-
+'''
 
 # Create your views here.
 class OCRUploadView(View):

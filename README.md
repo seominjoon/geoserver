@@ -35,6 +35,7 @@ Web framework for GeoSolver
 
 ## Dumping data
 Now that you have server running, you want to dump data on it (otherwise you will have to upload every question yourself!).
+
 1. download these files: [media.tar.gz](https://drive.google.com/file/d/0B_NX3z_sIBWTel9sRUNmbWdvSzQ/view?usp=sharing), [db.json](https://drive.google.com/file/d/0B_NX3z_sIBWTc1kxcHAxb3I1X0E/view?usp=sharing)
 2. Place `db.json` and unzipped media folder in `GeoServer/geoserver`.
 3. To dump the data onto the database, run:

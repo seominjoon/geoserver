@@ -31,7 +31,7 @@ Web framework for GeoSolver
   You should see something like `Starting development server at http://127.0.0.1:8000`.
   Note that if you want to make the server visible to other computers, you specify the ip address to be `0`, i.e. `python manage.py runserver 0:8080 --settings=geoserver.settings.local` (`8080` is port number of your choice).
   
-10. Check if everything is good by accessing http://localhost:8000/questions/list/all. You should see a webpage with an empty table.
+10. Check if everything is good by accessing `http://localhost:8000/questions/list/all`. You should see a webpage with an empty table.
 
 ## Dumping data
 Now that you have server running, you want to dump data on it (otherwise you will have to upload every question yourself!).
@@ -43,7 +43,7 @@ Now that you have server running, you want to dump data on it (otherwise you wil
   python manage.py loaddata db.jon --settings=geoserver.settings.local
   ```
   
-4. Now you should be able to see questions when accessing http://localhost:8000/questions/list/all.
+4. Now you should be able to see questions when accessing `http://localhost:8000/questions/list/all`.
 
 ## Ubuntu helps
 * To meet the python and MySQL requirements, run:

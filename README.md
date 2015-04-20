@@ -5,11 +5,11 @@ Web framework for GeoSolver
 1. Make sure you have Python 2 (tested on 2.7.6) and MySQL installed.
 2. Clone this repository, as well as `geosolver` and `equationtree`. They have to be added to the `$PYTHONPATH`. 
 3. Make sure the MySQL root acess credentials agrees with `DATABASES` in `geoserver/geoserver/settings/local.py`.
-4. Log in to MySQL server and create a database `geodb` in MySQL:
+4. Log in to MySQL server and create a database `geodb` in MySQL: 
   ```mysql
 create database geodb;
   ```
-5. Install all required packages for the server by typing on the terminal:
+5. Install all required packages for the server by typing on the terminal: 
   ```bash
 pip install numpy scipy scikit-learn sympy networkx nltk inflect pyparsing matplotlib pydot2 mysql-python django django-picklefield jsonfield django-storages boto django-modeldict pillow unipath beautifulsoup4 requests
   ```

@@ -20,6 +20,7 @@ pip install numpy scipy scikit-learn sympy networkx nltk inflect pyparsing matpl
 python manage.py migrate --settings=geoserver.settings.local
 ```
 This will set up all tables in the `geodb` database.
+
 9. To run the server, type on the terminal (in the same directory, `geoserver/geoserver`: 
 ```python manage.py runserver --settings=geoserver.settings.local```
 Note that if you want to make the server visible to other computers, you specify the ip address to be `0`, i.e. `python manage.py runserver 0:8080 --settings=geoserver.settings.local` (`8080` is port number of your choice).

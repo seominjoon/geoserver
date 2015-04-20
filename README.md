@@ -16,7 +16,9 @@ pip install numpy scipy scikit-learn sympy networkx nltk inflect pyparsing matpl
 6. Install OpenCV 3 (tested on 3.0.0). Make sure python wrappers are accessible via `$PYTHONPATH`.
 7. Change directory to `geoserver/geoserver`. 
 8. Type on the terminal: 
-```python manage.py migrate --settings=geoserver.settings.local```
+```bash
+python manage.py migrate --settings=geoserver.settings.local
+```
 This will set up all tables in the `geodb` database.
 9. To run the server, type on the terminal (in the same directory, `geoserver/geoserver`: 
 ```python manage.py runserver --settings=geoserver.settings.local```

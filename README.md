@@ -9,10 +9,12 @@ Web framework for GeoSolver
   ```mysql
   create database geodb;
   ```
+  
 5. Install all required packages for the server by typing on the terminal: 
   ```bash
   pip install numpy scipy scikit-learn sympy networkx nltk inflect pyparsing matplotlib pydot2 mysql-python django django-picklefield jsonfield django-storages boto django-modeldict pillow unipath beautifulsoup4 requests
   ```
+  
 6. Install OpenCV 3 (tested on 3.0.0). Make sure python wrappers are accessible via `$PYTHONPATH`.
 7. Change directory to `geoserver/geoserver`. 
 8. Type on the terminal: 

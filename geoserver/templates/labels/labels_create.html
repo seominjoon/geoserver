@@ -1,51 +1,23 @@
 {# templates/upload_form.html #}
 {% extends "base.html" %}
+{% load static from staticfiles %}
 
 {% block title %}Create label{% endblock %}
 {% block content %}
     <img src="{{ question.diagram.url }}">
-    <input type="text" id="input_label" />
-    <input type="text" id="input_type" />
-    <button id="button_add">Click</button> <br>
+    <input type="text" class="form-control" id="input_label" />
+    <input type="text" class="form-control" id="input_type" />
+    <button class="btn btn-default" id="button_add">Click</button> <br>
 
     <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <input type=hidden name="html" value="true" />
         {{ form }}
-        <input type="submit" value="Upload" />
+        <input type="submit" class="btn btn-default" value="Upload" />
     </form>
     <a href="{{ next }}">Next</a>
 {% endblock %}
 
 {% block script %}
-    var arr = [];
-var x = 0;
-var y = 0;
-
-$(document).ready(function() {
-  $('img').click(function(e) {
-      $('#input_label').focus();
-    var offset = $(this).offset();
-      x = e.pageX - offset.left;
-      y = e.pageY - offset.top;
-  });
-});
-
-$('#input_type').keypress(function (e) {
- var key = e.which;
- if(key == 13)  // the enter key code
-  {
-    $('#button_add').click();
-    return false;
-  }
-});
-
-$('#button_add').click(function(e) {
-    var dict = {'x':Math.round(x), 'y':Math.round(y), 'label': $('#input_label').val(), 'type': $('#input_type').val()};
-    arr.push(dict);
-    $('#id_text').val(JSON.stringify(arr));
-    $('#input_type').blur();
-    $('#input_type').val('');
-    $('#input_label').val('');
-});
+    <script src="{% static "labels/labels_create.js" %}"></script>
 {% endblock %}

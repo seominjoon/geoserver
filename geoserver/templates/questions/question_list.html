@@ -1,8 +1,8 @@
-{% extends "questions/question_base.html" %}
-
-{% block title %} Questions ({{ page_obj.paginator.count }}){% endblock %}
-{% block content %}
-        <h2>Questions ({{ page_obj.paginator.count }})</h2>
+{% extends "pagination.html" %}
+{% block questions_tab %}class="active"{% endblock %}
+{% block title2 %}Questions{% endblock %}
+{% block header %}Questions{% endblock %}
+{% block content2 %}
         <p>
             <a href="{% url 'questions-upload' %}">Upload a question</a>
             <a href="{% url 'questions-update_all' %}">Update all</a>
@@ -53,17 +53,4 @@
                 </tr>
             {% endfor %}
         </table>
-    {% if is_paginated %}
-        <nav>
-            <ul class="pagination">
-                {% for i in page_obj.paginator.page_range %}
-                    {% if i == page_obj.number %}
-                        <li class="active"><a href="#">{{ i }}<span class="sr-only">(current)</span></a></li>
-                    {% else %}
-                        <li><a href="{{ request.path }}?page={{ i }}">{{ i }}</a></li>
-                    {% endif %}
-                {%  endfor %}
-            </ul>
-        </nav>
-    {% endif %}
 {% endblock %}

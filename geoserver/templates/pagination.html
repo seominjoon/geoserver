@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %} {% block title2 %}{% endblock %} ({{ page_obj.paginator.count }}){% endblock %}
+{% block content %}
+    <h2>{% block header %}{% endblock %} ({{ page_obj.paginator.count }})</h2>
+    {% block content2 %}{% endblock %}
+    {% if is_paginated %}
+        <nav>
+            <ul class="pagination">
+                {% for i in page_obj.paginator.page_range %}
+                    {% if i == page_obj.number %}
+                        <li class="active"><a href="#">{{ i }}<span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                        <li><a href="{{ request.path }}?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {%  endfor %}
+            </ul>
+        </nav>
+    {% endif %}
+{% endblock %}

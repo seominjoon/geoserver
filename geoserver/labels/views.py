@@ -53,6 +53,7 @@ class LabelListView(ListView):
     '''
     model = Label
     context_object_name = 'label_list'
+    paginate_by = 20
 
     def get_queryset(self):
         '''

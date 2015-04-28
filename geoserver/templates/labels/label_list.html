@@ -1,7 +1,8 @@
-{% extends "labels/label_base.html" %}
-{% block title %}Labeled Question{% endblock %}
-{% block content %}
-	<h2>Labeled Questions</h2>
+{% extends "pagination.html" %}
+{% block labels_tab %}class="active"{% endblock %}
+{% block title2 %}Labeled Questions{% endblock %}
+{% block header %}Labeled Questions{% endblock %}
+{% block content2 %}
 	<table class="table">
 		<tr>
 			<th>ID</th>
@@ -46,19 +47,4 @@
 			</tr>
 		{% endfor %}
 	</table>
-    {% if is_paginated %}
-        <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="/cars?page={{ page_obj.previous_page_number }}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="/cars?page={{ page_obj.next_page_number }}">next</a>
-                {% endif %}
-            </span>
-        </div>
-    {% endif %}
 {% endblock %}

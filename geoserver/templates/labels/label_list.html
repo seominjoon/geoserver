@@ -8,9 +8,6 @@
 			<th>ID</th>
 			<th>Text</th>
 			<th>Diagram</th>
-			<th>Choices</th>
-			<th>Valid?</th>
-			<th>Answer</th>
 			<th>Tags</th>
 			<th>Actions</th>
 		</tr>
@@ -20,20 +17,7 @@
 				<td>{{ label.question.text }}</td>
 				<td>
 				{% if label.image != '' %}
-					<img src="{{ label.image.url }}">
-				{% endif %}
-				</td>
-				<td>
-					<ol>
-					{% for choice in label.question.choices.all %}
-						<li>{{ choice.text }}</li>
-					{% endfor %}
-					</ol>
-				</td>
-				<td>{{ label.question.valid }}</td>
-				<td>
-				{% if label.question.answer %}
-					{{ label.question.answer }}
+					<img src="{{ label.image.url }}" width="400px">
 				{% endif %}
 				</td>
 				<td>

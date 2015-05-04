@@ -14,9 +14,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="{% static "bootstrap/css/bootstrap.min.css" %}" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="{%  static "bootstrap/css/starter-template.css" %}" rel="stylesheet">
+    {% block css %}{% endblock %}
 
   </head>
 
@@ -35,7 +33,7 @@
           <div id="navbar" class="collapse navbar-collapse">
               <ul class="nav navbar-nav">
                   <li {% block questions_tab %}{% endblock %}><a href="{% url 'questions-list' 'all' %}">Questions</a></li>
-                  <li {% block labels_tab %}{% endblock %}><a href="{% url 'labels-list' %}">Labels</a></li>
+                  <li {% block labels_tab %}{% endblock %}><a href="{% url 'labels-list' 'all' %}">Labels</a></li>
                   <li {% block semantics_tab %}{% endblock %}><a href="#contact">Semantics</a></li>
               </ul>
           </div><!--/.nav-collapse -->

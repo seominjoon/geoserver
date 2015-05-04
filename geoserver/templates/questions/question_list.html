@@ -48,6 +48,7 @@
                     <td>
                         <a href="{% url 'questions-detail' question.pk %}">detail</a>
                         <a href="{% url 'questions-update' question.pk %}">update</a>
+                        <a href="{% url 'labels-create' question.pk %}">label</a>
                         <a href="{% url 'questions-delete' question.pk %}">delete</a>
                     </td>
                 </tr>

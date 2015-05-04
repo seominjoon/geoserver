@@ -3,12 +3,13 @@ from django.core.files import File
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.generic import View, ListView, UpdateView
+from django.views.generic import View, ListView
 from geosolver.utils import save_image, open_image_from_file
 from labels.forms import LabelForm
 from labels.geosolver_interface import get_labeled_image
 from labels.models import Label
-from questions.models import Question, QuestionTag
+from questions.models import Question
+from questions.views import _get_queries, _filter_questions
 
 
 class LabelCreateView(View):
@@ -59,11 +60,14 @@ class LabelListView(ListView):
         '''
         # One-time thing
         '''
-        test_tag = QuestionTag.objects.filter(word='test')[0]
-        for label in Label.objects.all():
-            if len(label.question.tags.all()) == 0:
-                label.question.tags.add(test_tag)
-        return Label.objects.order_by('question__pk')
+        if self.kwargs['query'] == 'all':
+            return Label.objects.filter(question__valid=True)
+        else:
+            p, t = _get_queries(self.kwargs['query'])
+            questions = _filter_questions(p, t)
+            labels = Label.objects.filter(question=questions)
+
+            return labels
 
 
 class LabelDownloadView(View):

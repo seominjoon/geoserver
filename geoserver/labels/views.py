@@ -8,7 +8,7 @@ from geosolver.utils import save_image, open_image_from_file
 from labels.forms import LabelForm
 from labels.geosolver_interface import get_labeled_image
 from labels.models import Label
-from questions.models import Question
+from questions.models import Question, QuestionTag
 from questions.views import _get_queries, _filter_questions
 
 
@@ -27,7 +27,16 @@ class LabelCreateView(View):
             ff = File(open(filepath, 'rb'))
             label = Label(question=question, text=form.cleaned_data['text'], image=ff)
             label.save()
-            kwargs = {'slug': str(int(slug)+1)}
+            # Remove unlabeled tag
+            pk_list = [q.pk for q in Question.objects.filter(tags__word="unlabeled")]
+            if QuestionTag.objects.filter(word="unlabeled").exists():
+                unlabeled = QuestionTag.objects.get(word="unlabeled")
+                question.tags.remove(unlabeled)
+                question.save()
+
+            new_slug = pk_list[pk_list.index(int(slug)) + 1]
+
+            kwargs = {'slug': new_slug}
             data = {'title': 'Success',
                     'message': 'Label creation succeeded.',
                     'link': reverse('labels-create', kwargs=kwargs),
@@ -36,14 +45,16 @@ class LabelCreateView(View):
         else:
             data = {'title': 'Failed',
                     'message': form.errors(),
-                    'link': reverse('labels-create'),
+                    'link': reverse('labels-create', kwargs={'slug': slug}),
                     'linkdes': 'Go back and upload the tree again.'}
             return render(request, 'result.html', data)
 
     def get(self, request, slug):
         question = Question.objects.get(pk=slug)
         form = LabelForm()
-        kwargs = {'slug': str(int(slug)+1)}
+        pk_list = [q.pk for q in Question.objects.filter(tags__word="unlabeled")]
+        new_slug = pk_list[pk_list.index(int(slug)) + 1]
+        kwargs = {'slug': new_slug}
         data = {'question': question, 'form': form, 'next': reverse('labels-create', kwargs=kwargs)}
         return render(request, 'labels/labels_create.html', data)
 
@@ -107,9 +118,10 @@ class LabelDeleteView(DeleteView):
         if 'html' in request.POST and request.POST['html'] == 'false':
             return HttpResponse('success')
         else:
+            kwargs = {'query': 'all'}
             data = {'title': 'Success',
                     'message': 'Label deleted successfully. Note that the question is NOT deleted.',
-                    'link': reverse('labels-list'),
+                    'link': reverse('labels-list', kwargs=kwargs),
                     'linkdes': 'Go to label list page.',
                     }
             return render(request, 'result.html', data)

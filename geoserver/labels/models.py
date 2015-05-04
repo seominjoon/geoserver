@@ -14,7 +14,7 @@ class Label(models.Model):
     '''
     Label for each question.
     '''
-    question = models.OneToOneField('questions.Question', null=True, blank=True, related_name='labels')
+    question = models.OneToOneField('questions.Question', null=True, blank=True, related_name='label')
     text = models.TextField()
     image = models.ImageField(upload_to=get_image_upload_path)
 

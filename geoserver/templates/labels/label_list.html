@@ -26,7 +26,8 @@
 					{% endfor %}
 				</td>
                 <td>
-
+                    <a href="{% url 'labels-detail' label.pk %}">detail</a>
+                    <a href="{% url 'labels-delete' label.pk %}">delete</a>
                 </td>
 			</tr>
 		{% endfor %}

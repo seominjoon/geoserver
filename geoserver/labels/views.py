@@ -1,9 +1,9 @@
 import json
 from django.core.files import File
 from django.core.urlresolvers import reverse
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
-from django.views.generic import View, ListView
+from django.views.generic import View, ListView, DeleteView, DetailView
 from geosolver.utils import save_image, open_image_from_file
 from labels.forms import LabelForm
 from labels.geosolver_interface import get_labeled_image
@@ -91,3 +91,32 @@ class LabelDownloadView(View):
 
         data = [label.repr() for label in objects]
         return JsonResponse(data, safe=False)
+
+
+class LabelDeleteView(DeleteView):
+    model = Label
+    # success_url = reverse_lazy('list') # Do I need this?
+    slug_field = 'pk'
+
+    def delete(self, request, *args, **kwargs):
+        # Actions
+        self.object = self.get_object()
+        self.object.delete()
+
+        # Views
+        if 'html' in request.POST and request.POST['html'] == 'false':
+            return HttpResponse('success')
+        else:
+            data = {'title': 'Success',
+                    'message': 'Label deleted successfully. Note that the question is NOT deleted.',
+                    'link': reverse('labels-list'),
+                    'linkdes': 'Go to label list page.',
+                    }
+            return render(request, 'result.html', data)
+
+
+class LabelDetailView(DetailView):
+
+    model = Label
+    context_object_name = 'label'
+    slug_field = 'pk'

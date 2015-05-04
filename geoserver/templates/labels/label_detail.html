@@ -1,0 +1,20 @@
+{% extends "labels/label_base.html" %}
+{% block title %}Question ID: {{ label.question.pk }}{% endblock %}
+{% block content %}
+	<h2>Question ID: {{ label.question.pk }}</h2>
+	<p>
+		<a href="{% url 'labels-list' query='all' %}">Go to list</a>
+		<a href="{% url 'labels-delete' label.question.pk %}">Delete</a>
+	</p>
+	<p><h4>Text</h4>{{ label.question.text }}</p>
+	<p><h4>Diagram</h4><img src="{{ label.question.diagram.url }}"></p>
+
+	<p>
+		<h4>Tags</h4>
+		<ul>
+			{% for tag in label.question.tags.all %}
+				<li>{{ tag }}</li>
+			{% endfor %}
+		</ul>
+	</p>
+{% endblock %}

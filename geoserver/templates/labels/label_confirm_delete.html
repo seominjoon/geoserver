@@ -1,0 +1,10 @@
+{# templates/questions/question_confirm_delete.html #}
+{% extends "labels/label_base.html" %}
+
+{% block title %}Delete a label{% endblock %}
+{% block content %}
+<form action="" method="post">{% csrf_token %}
+	<p>Are you sure you want to delete "{{ object }}"? Note that the question is NOT deleted by this operation.</p>
+	<input type="submit" value="Confirm" />
+</form>
+{% endblock %}

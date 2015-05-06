@@ -22,18 +22,25 @@
                 <tr>
                     <td>{{ question.pk }}</td>
                     <td>{{ forloop.counter0 }}</td>
-                    <td>{{ question.text }}</td>
+                    <td>
+                        <ul class="list-group">
+                            {% for sentence in question.sentences.all %}
+                                <li class="list-group-item">{{ sentence.index }}. {{  sentence.text }}</li>
+                            {% endfor %}
+                        </ul>
+
+                    </td>
                     <td>
                     {% if question.diagram != '' %}
                         <div class="item"><img src="{{ question.diagram.url }}" width="300px"></div>
                     {% endif %}
                     </td>
                     <td>
-                        <ol>
-                        {% for choice in question.choices.all %}
-                            <li>{{ choice.text }}</li>
-                        {% endfor %}
-                        </ol>
+                        <ul class="list-group">
+                            {% for choice in question.choices.all %}
+                                <li class="list-group-item">{{ choice.number }}. {{ choice.text }}</li>
+                            {% endfor %}
+                        </ul>
                     </td>
                     <td>
                     {% if question.answer %}
@@ -42,7 +49,7 @@
                     </td>
                     <td>
                         {% for tag in question.tags.all %}
-                        {{ tag }}
+                            <span class="label label-default">{{ tag }}</span>
                         {% endfor %}
                     </td>
                     <td>

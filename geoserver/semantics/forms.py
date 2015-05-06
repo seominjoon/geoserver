@@ -1,10 +1,9 @@
+from django import forms
 from django.forms import ModelForm
 from semantics.models import SemanticParse
 
 __author__ = 'minjoon'
 
 
-class SemanticParseForm(ModelForm):
-    class Meta:
-        model = SemanticParse
-        fields = ['text_formulas']
+class SentenceParseForm(forms.Form):
+    parses = forms.CharField(widget=forms.Textarea(attrs={'cols': 128, 'rows': 10}))

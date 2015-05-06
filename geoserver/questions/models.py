@@ -15,7 +15,26 @@ class QuestionTag(models.Model):
     
     def __unicode__(self):
         return self.word
-    
+
+
+class Word(models.Model):
+    text = models.CharField(max_length=32)
+    index = models.IntegerField()
+    sentence = models.ForeignKey('questions.Sentence', related_name='words')
+
+    def __unicode__(self):
+        return self.text
+
+
+class Sentence(models.Model):
+    text = models.TextField()
+    index = models.IntegerField()
+    question = models.ForeignKey('questions.Question', related_name='sentences')
+
+    def __unicode__(self):
+        return "%d-%d" % (self.question.pk, self.index)
+
+
 class Choice(models.Model):
     '''
     Each choice corresponds to one question.
@@ -27,7 +46,7 @@ class Choice(models.Model):
     question = models.ForeignKey('questions.Question', related_name='choices')
     
     def __unicode__(self):
-        return "%d-%d" %(self.question.pk, self.number)
+        return "%d-%d" % (self.question.pk, self.number)
 
 
 def get_upload_path(instance, filename):
@@ -37,6 +56,7 @@ def get_upload_path(instance, filename):
     ext = os.path.splitext(filename)[1]
     name = "question-%d-%s%s" %(round(time.time()),uuid.uuid4(), ext)
     return os.path.join('questions', name)
+
 
 class Question(models.Model):
     '''
@@ -51,7 +71,7 @@ class Question(models.Model):
     valid = models.BooleanField(default=True, blank=True)
     answer = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(QuestionTag, blank=True)
-    
+
     def __unicode__(self):
         return str(self.pk)
     
@@ -72,4 +92,3 @@ class Question(models.Model):
                 'answer': self.answer,
                 'choices': choices,
                 }
-

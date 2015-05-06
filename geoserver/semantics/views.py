@@ -6,54 +6,60 @@ from django.shortcuts import render
 # Create your views here.
 from django.views.generic import View, ListView
 from geoserver.utils import get_next_item
-from questions.models import Question
+from questions.models import Question, Sentence, QuestionTag
 from questions.views import _get_queries, _filter_questions
-from semantics.forms import SemanticParseForm
+from semantics.forms import SentenceParseForm
 from semantics.models import SemanticParse
 
 
-class SemanticParseCreateView(View):
 
-    def post(self, request, slug):
 
-        form = SemanticParseForm(request.POST)
+class SentenceParseAnnotateView(View):
+    def get(self, request, question_pk, sentence_index):
+        question = Question.objects.get(pk=question_pk)
+        sentence = Sentence.objects.get(question=question, index=sentence_index)
+        assert not SemanticParse.objects.filter(sentence=sentence).exists()
+        form = SentenceParseForm()
+        data = {'sentence': sentence, 'form': form, 'next': ''}
+        return render(request, 'semantics/sentence_parse_annotate.html', data)
+
+    def post(self, request, question_pk, sentence_index):
+        question = Question.objects.get(pk=question_pk)
+        sentence = Sentence.objects.get(question=question, index=sentence_index)
+        form = SentenceParseForm(request.POST)
         if form.is_valid():
-            question = Question.objects.get(pk=slug)
-            semantic_parse = SemanticParse(question=question, text_formulas=form.cleaned_data['text_formulas'])
-            semantic_parse.save()
-            kwargs = {'slug': get_next_item(Question, slug, valid=True)}
+            lines = form.cleaned_data['parses'].split('\r\n')
+            for index, line in enumerate(lines):
+                line = line.rstrip().lstrip()
+                semantic_parse = SemanticParse(sentence=sentence, number=index, parse=line)
+                semantic_parse.save()
+
+            if len(question.sentences.all()) - 1 == sentence.index:
+                pk_list = [q.pk for q in Question.objects.filter(tags__word="unannotated")]
+                if QuestionTag.objects.filter(word="unannotated").exists() and QuestionTag.objects.filter(word="annotated").exists():
+                    unannotated = QuestionTag.objects.get(word="unannotated")
+                    annotated = QuestionTag.objects.get(word="annotated")
+                    question.tags.remove(unannotated)
+                    question.tags.add(annotated)
+                    question.save()
+                next_question_pk = pk_list[pk_list.index(int(question_pk)) + 1]
+                next_sentence_index = 0
+            else:
+                next_question_pk = question_pk
+                next_sentence_index = "%d" % (int(sentence_index) + 1)
+
+            kwargs = {'question_pk': next_question_pk, 'sentence_index': next_sentence_index}
             data = {'title': 'Success',
-                    'message': 'Semantic parse creation succeeded.',
-                    'link': reverse('semantic-parses-create', kwargs=kwargs),
-                    'linkdes': 'Create semantic parse for the next question.'}
+                    'message': 'Semantic parses annotated successfully.',
+                    'link': reverse('semantics-annotate', kwargs=kwargs),
+                    'linkdes': 'Annotate the next sentence.'}
             return render(request, 'result.html', data)
         else:
             data = {'title': 'Failed',
                     'message': form.errors(),
-                    'link': reverse('semantic-parses-create'),
                     'linkdes': 'Go back and upload the tree again.'}
             return render(request, 'result.html', data)
 
-    def get(self, request, slug):
-        question = Question.objects.get(pk=slug)
-        form = SemanticParseForm()
-        kwargs = {'slug': get_next_item(Question, slug, valid=True)}
-        data = {'question': question, 'form': form, 'next': reverse('semantic-parses-create', kwargs=kwargs)}
-        return render(request, 'semantics/semanticparse_create.html', data)
-
-
-class SemanticParseListView(ListView):
-    '''
-    Display all characters
-    '''
-    model = SemanticParse
-    context_object_name = 'semantic_parse_list'
-
-    def get_queryset(self):
-        '''
-        # One-time thing
-        '''
-        return SemanticParse.objects.order_by('question__pk')
 
 
 class SemanticParseDownloadView(View):
@@ -64,11 +70,14 @@ class SemanticParseDownloadView(View):
     def get(self, request, query):
 
         if query == 'all':
-            objects = SemanticParse.objects.all()
+            objects = Question.objects.all()
         elif re.match(r'^\d+$', query):
-            objects = [SemanticParse.objects.get(question__pk=int(query))]
+            objects = [Question.objects.get(pk=int(query))]
         else:
             p, t = _get_queries(query)
             objects = _filter_questions(p, t)
-        data = [parse.text_formulas for parse in objects]
+        data = {question.pk: {sentence.index: {parse.number: parse.parse
+                                               for parse in sentence.semantic_parses.all()}
+                              for sentence in question.sentences.all()}
+                for question in objects}
         return JsonResponse(data, safe=False)

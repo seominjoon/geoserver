@@ -5,9 +5,13 @@ from jsonfield import JSONField
 
 
 class SemanticParse(models.Model):
-    question = models.OneToOneField('questions.Question', null=True, blank=True, related_name='semantic_parse')
-    text_formulas = JSONField()
+    # question = models.OneToOneField('questions.Question', null=True, blank=True, related_name='semantic_parse')
+    sentence = models.ForeignKey("questions.Sentence", related_name='semantic_parses', null=True)
+    number = models.IntegerField()
+    parse = models.TextField()
+
+    # text_formulas = JSONField()
 
     def __unicode__(self):
-        return str(self.question.pk)
+        return "%s-%d" % (unicode(self.sentence), self.number)
 

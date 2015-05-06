@@ -8,7 +8,7 @@ from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
 
 from questions.forms import QuestionForm, ChoiceForm
-from questions.models import Question, QuestionTag
+from questions.models import Question, QuestionTag, Sentence, Word
 
 
 # Create your views here.
@@ -35,6 +35,42 @@ def _filter_questions(pk_queries, tag_queries):
     return questions
 
 
+def _split_text(text):
+    temps = re.split("([.?])", text.rstrip())
+    sentences = []
+    idx = 0
+    curr = ""
+    while idx < len(temps):
+        if re.match("^[.?]$", temps[idx]):
+            curr += temps[idx][0]
+            sentences.append(curr)
+            curr = ""
+        else:
+            curr = temps[idx]
+        idx += 1
+    if curr != "":
+        sentences.append(curr)
+    return sentences
+
+
+def _add_sentences(question):
+    for index, text in enumerate(_split_text(question.text)):
+        sentence = Sentence(question=question, text=text, index=index)
+        sentence.save()
+
+
+def _split_sentence(text):
+    temps = re.split("(\W)", text)
+    words = [temp for temp in temps if not re.match("^\s*$", temp)]
+    return words
+
+
+def _add_words(sentence):
+    for index, text in enumerate(_split_sentence(sentence.text)):
+        word = Word(sentence=sentence, text=text, index=index)
+        word.save()
+
+
 class QuestionListView(ListView):
     model = Question
     context_object_name = 'question_list'
@@ -59,6 +95,9 @@ class QuestionUploadView(View):
         if form.is_valid():
             # Actions
             this = form.save()
+
+            # Add sentences
+            _add_sentences(this)
             
             # Views
             if request.POST['html'] == 'false':

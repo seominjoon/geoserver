@@ -6,3 +6,11 @@ body {
     padding-top: 0px;
   }
 }
+ul {
+    list-style:none;
+    padding-left:0;
+}​
+ol {
+    list-style:none;
+    padding-left:0;
+}​

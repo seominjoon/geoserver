@@ -2,7 +2,7 @@
 {% block title %}Semanic Parses{% endblock %}
 {% block content %}
 	<h2>Semantic Parses</h2>
-	<table border="1">
+	<table class="table">
 		<tr>
 			<th>ID</th>
 			<th>Text</th>
@@ -27,13 +27,13 @@
                     </ul>
 				</td>
                 <td>
-                    <ul>
+                    <ol>
                     {% for formula in semantic_parse.text_formulas %}
                         <li>
                         {{ formula }}
                         </li>
                     {% endfor %}
-                    </ul>
+                    </ol>
                 </td>
 			</tr>
 		{% endfor %}

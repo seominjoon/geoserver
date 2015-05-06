@@ -6,7 +6,9 @@ Created on Jul 21, 2014
 functions for updating the database
 '''
 
-from questions.models import QuestionTag, Question
+from questions.models import QuestionTag, Question, Sentence
+from questions.views import _split_text
+
 
 def add_question(text, imgpath, tagwords=None):
     '''
@@ -29,4 +31,4 @@ def add_question(text, imgpath, tagwords=None):
 
     # Update new tags
     question.save()
-    
+

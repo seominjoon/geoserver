@@ -2,10 +2,7 @@ import re
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render
-
-# Create your views here.
-from django.views.generic import View, ListView
-from geoserver.utils import get_next_item
+from django.views.generic import View
 from geosolver.text.annotation_to_node import is_valid_annotation
 from questions.models import Question, Sentence, QuestionTag
 from questions.views import _get_queries, _filter_questions

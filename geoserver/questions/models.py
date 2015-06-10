@@ -86,6 +86,7 @@ class Question(models.Model):
             diagram_url = request.build_absolute_uri(self.diagram.url)
         return {'pk': self.pk,
                 'text': self.text,
+                'words': {sentence.index: {word.index: word.text for word in sentence.words.all()} for sentence in self.sentences.all()},
                 'diagram_url': diagram_url,
                 'has_choices': self.has_choices,
                 'valid': self.valid,

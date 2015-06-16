@@ -1,0 +1,7 @@
+[submodule "deps/equationtree"]
+	path = deps/equationtree
+	url = git@github.com:allenai/equationtree.git
+[submodule "deps/equationtree"]
+	path = deps/geosolver
+	url = git@github.com:allenai/geosolver.git
+

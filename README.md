@@ -33,16 +33,17 @@ Web framework for GeoSolver
   
 10. Check if everything is good by accessing `http://localhost:8000/questions/list/all`. You should see a webpage with an empty table.
 
-## Dumping data
-Now that you have server running, you want to dump data on it (otherwise you will have to upload every question yourself!).
+## Loading dumped data
+Now that you have server running, you want to load data on it (otherwise you will have to upload every question yourself!).
 
-1. download these files: [media.tar.gz](https://drive.google.com/file/d/0B_NX3z_sIBWTel9sRUNmbWdvSzQ/view?usp=sharing), [db.json](https://drive.google.com/file/d/0B_NX3z_sIBWTS3l4VUd2cUZvb1k/view?usp=sharing)
-2. Place `db.json` and unzipped media folder in `GeoServer/geoserver`.
-3. To dump the data onto the database, run:
+1. download the media folder, which contains all the images: [media.tar.gz](https://drive.google.com/file/d/0B_NX3z_sIBWTel9sRUNmbWdvSzQ/view?usp=sharing)
+2. Unzip the media folder in GeoServer/geoserver (so that you have GeoServer/geoserver/media folder).
+3. Text data can be loaded with the json files in GeoServer/geoserver:
   ```bash
-  python manage.py loaddata db.jon --settings=geoserver.settings.local
+  python manage.py loaddata questions.json --settings=geoserver.settings.local
+  python manage.py loaddata labels.json --settings=geoserver.settings.local
+  python manage.py loaddata semantics.json --settings=geoserver.settings.local
   ```
-  
 4. Now you should be able to see questions when accessing `http://localhost:8000/questions/list/all`.
 
 ## Ubuntu helps

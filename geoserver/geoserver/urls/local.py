@@ -11,10 +11,7 @@ urlpatterns = patterns('',
 
     url(r'^semantics/', include('semantics.urls')),
     url(r'^labels/', include('labels.urls')),
-    url(r'^ocrs/', include('ocrs.urls')),
-    url(r'^characters/', include('characters.urls')),
     url(r'^questions/', include('questions.urls')),
-    url(r'^deptrees/', include('deptrees.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )
 

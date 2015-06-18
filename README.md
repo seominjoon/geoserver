@@ -4,11 +4,12 @@ Web framework for GeoSolver
 ## Local server hosting: general instruction
 1. Make sure you have Python 2 (tested on 2.7.6) and MySQL installed.
 2. Clone this repository, as well as `geosolver` and `equationtree`. They have to be added to the `$PYTHONPATH`. 
-3. Make sure the MySQL root acess credentials agrees with `DATABASES` in `GeoServer/geoserver/settings/local.py`.
+3. Make sure the MySQL root acess credentials agrees with `DATABASES` in `GeoServer/geoserver/geoserver/settings/local.py`.
 4. Log in to MySQL server and create a database `geodb` in MySQL: 
   ```mysql
   create database geodb;
   ```
+  If you already have `geodb`, make sure to drop it before creating it (by `drop database geodb`), or come up with a new name (e.g. `geodb2`) and update the database name in `GeoServer/geoserver/geoserver/settings/local.py`.
   
 5. Install all required packages for the server by typing on the terminal: 
   ```bash

@@ -38,9 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'questions',
-    'deptrees',
-    'characters',
-    'ocrs',
     'labels',
     'semantics',
 )

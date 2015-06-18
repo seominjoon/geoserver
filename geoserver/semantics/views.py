@@ -3,7 +3,6 @@ from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import View
-from geosolver.text.annotation_to_node import is_valid_annotation
 from questions.models import Question, Sentence, QuestionTag
 from questions.views import _get_queries, _filter_questions
 from semantics.forms import SentenceParseForm
@@ -31,9 +30,11 @@ class SentenceParseAnnotateView(View):
             invalid_lines = []
             for index, line in enumerate(lines):
                 line = line.rstrip().lstrip()
+                """
                 if not is_valid_annotation(line):
                     valid = False
                     invalid_lines.append(line)
+                """
 
             if valid:
                 for index, line in enumerate(lines):

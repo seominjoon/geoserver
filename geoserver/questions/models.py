@@ -9,7 +9,7 @@ from django.db import models
 # Create your models here.
 class QuestionTag(models.Model):
     '''
-    Tag for grouping questions.
+    Tag for grouping questionsm
     '''
     word = models.CharField(max_length=16)
     

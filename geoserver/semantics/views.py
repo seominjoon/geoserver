@@ -2,9 +2,9 @@ import re
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render
-from django.views.generic import View
+from django.views.generic import View, ListView
 from questions.models import Question, Sentence, QuestionTag
-from questions.views import _get_queries, _filter_questions
+from questions.views import _get_queries, _filter_questions, QuestionListView
 from semantics.forms import SentenceParseForm
 from semantics.models import SemanticParse
 
@@ -15,10 +15,13 @@ class SentenceParseAnnotateView(View):
     def get(self, request, question_pk, sentence_index):
         question = Question.objects.get(pk=question_pk)
         sentence = Sentence.objects.get(question=question, index=sentence_index)
-        assert not SemanticParse.objects.filter(sentence=sentence).exists()
-        form = SentenceParseForm()
+        if SemanticParse.objects.filter(sentence=sentence).exists():
+            parses = "\n".join(sp.parse for sp in SemanticParse.objects.filter(sentence=sentence))
+        else:
+            parses = ""
+        form = SentenceParseForm(initial={'parses': parses})
         data = {'sentence': sentence, 'form': form, 'next': ''}
-        return render(request, 'semantics/sentence_parse_annotate.html', data)
+        return render(request, 'semantics/sentenceparse_annotate.html', data)
 
     def post(self, request, question_pk, sentence_index):
         question = Question.objects.get(pk=question_pk)
@@ -39,7 +42,11 @@ class SentenceParseAnnotateView(View):
             if valid:
                 for index, line in enumerate(lines):
                     line = line.rstrip().lstrip()
-                    semantic_parse = SemanticParse(sentence=sentence, number=index, parse=line)
+                    if SemanticParse.objects.filter(sentence=sentence, number=index).exists():
+                        semantic_parse = SemanticParse.objects.get(sentence=sentence, number=index)
+                        semantic_parse.parse = line
+                    else:
+                        semantic_parse = SemanticParse(sentence=sentence, number=index, parse=line)
                     semantic_parse.save()
 
                 if len(question.sentences.all()) - 1 == sentence.index:
@@ -69,7 +76,6 @@ class SentenceParseAnnotateView(View):
         return render(request, 'result.html', data)
 
 
-
 class SemanticParseDownloadView(View):
     '''
     QuestionDownloadView is similar to QuestionListView,
@@ -89,3 +95,7 @@ class SemanticParseDownloadView(View):
                               for sentence in question.sentences.all()}
                 for question in objects}
         return JsonResponse(data, safe=False)
+
+class SemanticParseListView(QuestionListView):
+    template_name = 'semantics/semanticparse_list.html'
+

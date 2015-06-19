@@ -21,9 +21,10 @@
 				{% endif %}
 				</td>
 				<td>
-					{% for tag in label.question.tags.all %}
-					{{ tag }} 
-					{% endfor %}
+                    {% for tag in label.question.tags.all %}
+						<span class="label label-default">{{ tag }}</span>
+                    {% endfor %}
+
 				</td>
                 <td>
                     <a href="{% url 'labels-detail' label.pk %}">detail</a>

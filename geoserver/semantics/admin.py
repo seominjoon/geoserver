@@ -1,6 +1,6 @@
 from django.contrib import admin
 
 # Register your models here.
-from semantics.models import SemanticParse
+from semantics.models import SentenceAnnotation
 
-admin.site.register(SemanticParse)
+admin.site.register(SentenceAnnotation)

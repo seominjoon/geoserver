@@ -1,0 +1,32 @@
+{# templates/upload_form.html #}
+{% extends "semantics/semantic_base.html" %}
+
+{% block title %}Annotate parses from a sentence{% endblock %}
+{% block content %}
+    <h2>Question ID: {{ choice.question.pk }}</h2>
+    <img src="{{ choice.question.diagram.url }}">
+    <p>{{ choice.question.text }}</p>
+    <h4>choice number: {{ choice.number }}</h4>
+    <table class="table">
+        <tr>
+            {% for word in choice.words.all %}
+                <th>{{  word.index }}</th>
+            {% endfor %}
+        </tr>
+        <tr>
+            {% for word in choice.words.all %}
+                <td>{{  word.text }}</td>
+            {% endfor %}
+        </tr>
+    </table>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type=hidden name="html" value="true" />
+        {{ form }}
+        <input type="submit" value="Upload" />
+    </form>
+    <a href="{{ next }}">Next</a>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

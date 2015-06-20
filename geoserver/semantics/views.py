@@ -3,23 +3,21 @@ from django.core.urlresolvers import reverse
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.views.generic import View, ListView
-from questions.models import Question, Sentence, QuestionTag
+from questions.models import Question, Sentence, QuestionTag, Choice
 from questions.views import _get_queries, _filter_questions, QuestionListView
 from semantics.forms import SentenceParseForm
-from semantics.models import SemanticParse
-
-
+from semantics.models import SentenceAnnotation, ChoiceAnnotation
 
 
 class SentenceParseAnnotateView(View):
     def get(self, request, question_pk, sentence_index):
         question = Question.objects.get(pk=question_pk)
         sentence = Sentence.objects.get(question=question, index=sentence_index)
-        if SemanticParse.objects.filter(sentence=sentence).exists():
-            parses = "\n".join(sp.parse for sp in SemanticParse.objects.filter(sentence=sentence))
+        if SentenceAnnotation.objects.filter(sentence=sentence).exists():
+            annotations = "\n".join(sp.parse for sp in SentenceAnnotation.objects.filter(sentence=sentence))
         else:
-            parses = ""
-        form = SentenceParseForm(initial={'parses': parses})
+            annotations = ""
+        form = SentenceParseForm(initial={'parses': annotations})
         data = {'sentence': sentence, 'form': form, 'next': ''}
         return render(request, 'semantics/sentenceparse_annotate.html', data)
 
@@ -42,12 +40,12 @@ class SentenceParseAnnotateView(View):
             if valid:
                 for index, line in enumerate(lines):
                     line = line.rstrip().lstrip()
-                    if SemanticParse.objects.filter(sentence=sentence, number=index).exists():
-                        semantic_parse = SemanticParse.objects.get(sentence=sentence, number=index)
-                        semantic_parse.parse = line
+                    if SentenceAnnotation.objects.filter(sentence=sentence, number=index).exists():
+                        sentence_annotation = SentenceAnnotation.objects.get(sentence=sentence, number=index)
+                        sentence_annotation.annotation = line
                     else:
-                        semantic_parse = SemanticParse(sentence=sentence, number=index, parse=line)
-                    semantic_parse.save()
+                        sentence_annotation = SentenceAnnotation(sentence=sentence, number=index, parse=line)
+                    sentence_annotation.save()
 
                 if len(question.sentences.all()) - 1 == sentence.index:
                     pk_list = [q.pk for q in Question.objects.filter(tags__word="unannotated")]
@@ -99,3 +97,56 @@ class SemanticParseDownloadView(View):
 class SemanticParseListView(QuestionListView):
     template_name = 'semantics/semanticparse_list.html'
 
+
+class ChoiceAnnotateView(View):
+    def get(self, request, question_pk, choice_number):
+        question = Question.objects.get(pk=question_pk)
+        choice = Choice.objects.get(question=question, number=choice_number)
+        if ChoiceAnnotation.objects.filter(choice=choice).exists():
+            annotation_text = ChoiceAnnotation.objects.get(choice=choice).text
+        else:
+            annotation_text = ""
+        form = ChoiceAnnotationForm(initial={'text': annotation_text})
+        data = {'choice': choice, 'form': form, 'next': ''}
+        # TODO : create template
+        return render(request, 'semantics/choiceannotation_annotate.html', data)
+
+    def post(self, request, question_pk, choice_number):
+        question = Question.objects.get(pk=question_pk)
+        choice = Sentence.objects.get(question=question, number=choice_number)
+        form = SentenceParseForm(request.POST)
+        if form.is_valid():
+            lines = form.cleaned_data['text'].split('\r\n')
+            valid = True
+            if len(lines) > 1:
+                valid = False
+
+            if valid:
+                line = lines[0]
+                line = line.rstrip().lstrip()
+                if ChoiceAnnotation.objects.filter(choice=choice).exists():
+                    choice_annotation = ChoiceAnnotation.objects.get(choice=choice)
+                    choice_annotation.text = line
+                else:
+                    choice_annotation = ChoiceAnnotation(choice=choice, text=line)
+                choice_annotation.save()
+
+                if len(question.choices.all()) - 1 == choice.number:
+                    pk_list = [q.pk for q in Question.objects.filter(tags__word="unannotated")]
+                    next_question_pk = pk_list[pk_list.index(int(question_pk)) + 1]
+                    next_choice_number = 0
+                else:
+                    next_question_pk = question_pk
+                    next_choice_number = "%d" % (int(choice_number) + 1)
+
+                kwargs = {'question_pk': next_question_pk, 'choice_number': next_choice_number}
+                data = {'title': 'Success',
+                        'message': 'Choice annotated successfully.',
+                        'link': reverse('semantics-choice-annotate', kwargs=kwargs),
+                        'linkdes': 'Annotate the next choice.'}
+                return render(request, 'result.html', data)
+
+        data = {'title': 'Failed',
+                'message': "%r" % (invalid_lines),
+                'linkdes': 'Go back and upload the tree again.'}
+        return render(request, 'result.html', data)

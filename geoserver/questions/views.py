@@ -7,8 +7,8 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
 
-from questions.forms import QuestionForm, ChoiceForm
-from questions.models import Question, QuestionTag, Sentence, Word
+from questions.forms import QuestionForm, ChoiceForm, ChoiceLimitedForm
+from questions.models import Question, QuestionTag, Sentence, SentenceWord, Choice
 
 
 # Create your views here.
@@ -67,7 +67,7 @@ def _split_sentence(text):
 
 def _add_words(sentence):
     for index, text in enumerate(_split_sentence(sentence.text)):
-        word = Word(sentence=sentence, text=text, index=index)
+        word = SentenceWord(sentence=sentence, text=text, index=index)
         word.save()
 
 
@@ -185,7 +185,40 @@ class QuestionUpdateView(UpdateView):
     fields = ['text','diagram','valid','has_choices','answer','tags']
     template_name_suffix = '_update_form'
     slug_field = 'pk'
-   
+
+
+class QuestionChoiceUpdateView(View):
+    def get(self, request, slug):
+        question = Question.objects.get(pk=slug)
+        question_form = QuestionForm(prefix=slug, instance=question)
+        choice_forms = [ChoiceLimitedForm(prefix=choice.pk, instance=choice)
+                        for choice in Choice.objects.filter(question=question)]
+        data = {'title': 'Update a question', 'question_form': question_form, 'choice_forms': choice_forms}
+        return render(request, 'questions/question_update_choice_form.html', data)
+
+    def post(self, request, slug):
+        question = Question.objects.get(pk=slug)
+        question_form = QuestionForm(request.POST, prefix=slug, instance=question)
+        choice_forms = [ChoiceLimitedForm(request.POST, prefix=choice.pk, instance=choice)
+                        for choice in Choice.objects.filter(question=question)]
+        if question_form.is_valid() and all(form.is_valid() for form in choice_forms):
+            question_form.save()
+            for form in choice_forms: form.save()
+            kwargs = {'query': 'all'}
+            data = {'title': 'Success',
+                    'message': 'Question updated successfully.',
+                    'link': reverse('questions-list', kwargs=kwargs),
+                    'linkdes': 'Go to the question list page',}
+            return render(request, 'result.html', data)
+        else:
+            kwargs = {'slug': slug}
+            data = {'title': 'Failure',
+                    'message': 'Question update failed.',
+                    'link': reverse('questions-update', kwargs=kwargs),
+                    'linkdes': 'Go back to update page.',}
+            return render(request, 'result.html', data)
+
+
 class QuestionUpdateAllView(View):
     '''
     This view allows user to update multiple questions at the same time

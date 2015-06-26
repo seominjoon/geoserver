@@ -21,4 +21,9 @@ class QuestionForm(ModelForm):
 class ChoiceForm(ModelForm):
     class Meta:
         model = Choice
-        fields = ['question' , 'text', 'number']
+        fields = ['question', 'text', 'number']
+
+class ChoiceLimitedForm(ModelForm):
+    class Meta:
+        model = Choice
+        fields = ['text']

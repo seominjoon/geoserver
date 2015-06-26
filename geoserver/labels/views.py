@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.generic import View, ListView, DeleteView, DetailView
-from geosolver.utils import save_image, open_image_from_file
+from geosolver.utils.prep import save_image, open_image_from_file
 from labels.forms import LabelForm
 from labels.geosolver_interface import get_labeled_image
 from labels.models import Label

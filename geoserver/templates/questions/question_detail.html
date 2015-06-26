@@ -8,6 +8,44 @@
 		<a href="{% url 'questions-delete' question.pk %}">Delete</a>
 	</p>
 	<p><h4>Text</h4>{{ question.text }}</p>
+	<p><h4>Sentences</h4>
+		<table class="table">
+		{% for sentence in question.sentences.all %}
+			<tr>
+				<th>{{ sentence.index }}</th>
+				<td>{{ sentence.text }}</td>
+			</tr>
+		{% endfor %}
+		</table>
+	</p>
+
+	<p><h4>Sentence Words</h4>
+	{% for sentence in question.sentences.all %}
+		<table class="table">
+			<tr>
+				{% for word in sentence.words.all %}
+					<th>{{  word.index }}</th>
+				{% endfor %}
+			</tr>
+			<tr>
+				{% for word in sentence.words.all %}
+					<td>{{  word.text }}</td>
+				{% endfor %}
+			</tr>
+		</table>
+
+		<table class="table">
+            {% for expression in sentence.expressions.all %}
+				<tr>
+					<th>{{ expression.index }}</th>
+					<td>{{ expression.text }}</td>
+				</tr>
+            {% endfor %}
+		</table>
+	{% endfor %}
+	</p>
+
+
 	<p><h4>Diagram</h4><img src="{{ question.diagram.url }}"></p>
 	<p>
 		<h4>Choices</h4>
@@ -17,6 +55,34 @@
 		{% endfor %}
         </ul>
 	</p>
+
+	<p><h4>Choice Words</h4>
+    {% for choice in question.choices.all %}
+		<table class="table">
+			<tr>
+                {% for word in choice.words.all %}
+					<th>{{  word.index }}</th>
+                {% endfor %}
+			</tr>
+			<tr>
+                {% for word in choice.words.all %}
+					<td>{{  word.text }}</td>
+                {% endfor %}
+			</tr>
+		</table>
+
+		{% if choice.expressions.all|length  > 0 %}
+		<table class="table">
+            {% for expression in choice.expressions.all %}
+				<tr>
+					<th>{{ expression.index }}</th>
+					<td>{{ expression.text }}</td>
+				</tr>
+            {% endfor %}
+		</table>
+		{% endif %}
+    {% endfor %}
+    </p>
 	<p><h4>Has choices?</h4>{{ question.has_choices }}</p>
 	<p><h4>Valid?</h4>{{ question.valid }}</p>
 	

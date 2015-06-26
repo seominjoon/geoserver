@@ -23,11 +23,7 @@
                     <td>{{ question.pk }}</td>
                     <td>{{ forloop.counter0 }}</td>
                     <td>
-                        <ul class="list-group">
-                            {% for sentence in question.sentences.all %}
-                                <li class="list-group-item">{{ sentence.index }}. {{  sentence.text }}</li>
-                            {% endfor %}
-                        </ul>
+                        {{  question.text }}
 
                     </td>
                     <td>

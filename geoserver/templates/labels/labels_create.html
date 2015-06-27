@@ -4,7 +4,15 @@
 
 {% block title %}Create label{% endblock %}
 {% block content %}
+    <canvas id="myCanvas" width="{{ question.diagram.width }}" height="{{ question.diagram.height }}"></canvas>
+    <!--
+    {% if question.label %}
+    <img src="{{ question.label.image.url }}">
+    {% else %}
     <img src="{{ question.diagram.url }}">
+    {% endif %}
+    -->
+
     <input type="text" class="form-control" id="input_label" />
     <input type="text" class="form-control" id="input_type" />
     <button class="btn btn-default" id="button_add">Click</button> <br>
@@ -19,5 +27,8 @@
 {% endblock %}
 
 {% block script %}
+    <script>
+        var diagram_url = "{{ question.diagram.url }}";
+    </script>
     <script src="{% static "labels/labels_create.js" %}"></script>
 {% endblock %}

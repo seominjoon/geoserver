@@ -9,7 +9,7 @@ from labels.forms import LabelForm
 from labels.geosolver_interface import get_labeled_image
 from labels.models import Label
 from questions.models import Question, QuestionTag
-from questions.views import _get_queries, _filter_questions
+from questions.views import _get_queries, _filter_questions, QuestionListView
 
 
 class LabelCreateView(View):
@@ -19,16 +19,22 @@ class LabelCreateView(View):
         form = LabelForm(request.POST)
         if form.is_valid():
             question = Question.objects.get(pk=slug)
+            text = form.cleaned_data['text']
             image = open_image_from_file(question.diagram)
             label_array = json.loads(form.cleaned_data['text'])
             new_image = get_labeled_image(image, label_array)
             # Do some processing on the image
             _, filepath = save_image(new_image)
             ff = File(open(filepath, 'rb'))
-            label = Label(question=question, text=form.cleaned_data['text'], image=ff)
+            if Label.objects.filter(question=question).exists():
+                label = Label.objects.get(question=question)
+                label.text = text
+                label.image = ff
+            else:
+                label = Label(question=question, text=text, image=ff)
             label.save()
             # Remove unlabeled tag
-            pk_list = [q.pk for q in Question.objects.filter(tags__word="unlabeled")]
+            pk_list = [q.pk for q in Question.objects.all()]
             if QuestionTag.objects.filter(word="unlabeled").exists():
                 unlabeled = QuestionTag.objects.get(word="unlabeled")
                 question.tags.remove(unlabeled)
@@ -51,14 +57,18 @@ class LabelCreateView(View):
 
     def get(self, request, slug):
         question = Question.objects.get(pk=slug)
-        form = LabelForm()
-        pk_list = [q.pk for q in Question.objects.filter(tags__word="unlabeled")]
+        if Label.objects.filter(question=question).exists():
+            annotation = Label.objects.get(question=question).text
+        else:
+            annotation = ""
+        form = LabelForm(initial={'text': annotation})
+        pk_list = [q.pk for q in Question.objects.all()]
         new_slug = pk_list[pk_list.index(int(slug)) + 1]
         kwargs = {'slug': new_slug}
         data = {'question': question, 'form': form, 'next': reverse('labels-create', kwargs=kwargs)}
         return render(request, 'labels/labels_create.html', data)
 
-
+"""
 class LabelListView(ListView):
     '''
     Display all characters
@@ -79,6 +89,9 @@ class LabelListView(ListView):
             labels = Label.objects.filter(question=questions)
 
             return labels
+"""
+class LabelListView(QuestionListView):
+    template_name = 'labels/label_list.html'
 
 
 class LabelDownloadView(View):
@@ -107,7 +120,7 @@ class LabelDownloadView(View):
 class LabelDeleteView(DeleteView):
     model = Label
     # success_url = reverse_lazy('list') # Do I need this?
-    slug_field = 'pk'
+    slug_field = 'question__pk'
 
     def delete(self, request, *args, **kwargs):
         # Actions
@@ -131,4 +144,4 @@ class LabelDetailView(DetailView):
 
     model = Label
     context_object_name = 'label'
-    slug_field = 'pk'
+    slug_field = 'question__pk'

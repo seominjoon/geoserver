@@ -11,24 +11,27 @@
 			<th>Tags</th>
 			<th>Actions</th>
 		</tr>
-		{% for label in label_list %}
+		{% for question in question_list %}
 			<tr>
-				<td>{{ label.question.pk }}</td>
-				<td>{{ label.question.text }}</td>
+				<td>{{ question.pk }}</td>
+				<td>{{ question.text }}</td>
 				<td>
-				{% if label.image != '' %}
-					<img src="{{ label.image.url }}" width="400px">
+				{% if question.label %}
+					<img src="{{ question.label.image.url }}" width="400px">
+				{% else %}
+					<img src="{{ question.diagram.url }}" width="400px">
 				{% endif %}
 				</td>
 				<td>
-                    {% for tag in label.question.tags.all %}
+                    {% for tag in question.tags.all %}
 						<span class="label label-default">{{ tag }}</span>
                     {% endfor %}
 
 				</td>
                 <td>
-                    <a href="{% url 'labels-detail' label.pk %}">detail</a>
-                    <a href="{% url 'labels-delete' label.pk %}">delete</a>
+					<a href="{% url 'labels-create' question.pk %}">annotate</a>
+                    <a href="{% url 'labels-detail' question.pk %}">detail</a>
+                    <a href="{% url 'labels-delete' question.pk %}">delete</a>
                 </td>
 			</tr>
 		{% endfor %}

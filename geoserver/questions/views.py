@@ -8,6 +8,7 @@ from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
 
 from questions.forms import QuestionForm, ChoiceForm, ChoiceLimitedForm
+from questions.internal import reset_question
 from questions.models import Question, QuestionTag, Sentence, SentenceWord, Choice
 
 
@@ -179,24 +180,17 @@ class QuestionDownloadView(View):
         return JsonResponse(data, safe=False)
 
 
-
-class QuestionUpdateView(UpdateView):
-    model = Question
-    fields = ['text','diagram','valid','has_choices','answer','tags']
-    template_name_suffix = '_update_form'
-    slug_field = 'pk'
-
-
-class QuestionChoiceUpdateView(View):
+class QuestionUpdateView(View):
     def get(self, request, slug):
         question = Question.objects.get(pk=slug)
         question_form = QuestionForm(prefix=slug, instance=question)
         choice_forms = [ChoiceLimitedForm(prefix=choice.pk, instance=choice)
                         for choice in Choice.objects.filter(question=question)]
         data = {'title': 'Update a question', 'question_form': question_form, 'choice_forms': choice_forms}
-        return render(request, 'questions/question_update_choice_form.html', data)
+        return render(request, 'questions/question_update_form.html', data)
 
     def post(self, request, slug):
+        print(request.POST['next'])
         question = Question.objects.get(pk=slug)
         question_form = QuestionForm(request.POST, prefix=slug, instance=question)
         choice_forms = [ChoiceLimitedForm(request.POST, prefix=choice.pk, instance=choice)
@@ -204,6 +198,9 @@ class QuestionChoiceUpdateView(View):
         if question_form.is_valid() and all(form.is_valid() for form in choice_forms):
             question_form.save()
             for form in choice_forms: form.save()
+
+            reset_question(question)
+
             kwargs = {'query': 'all'}
             data = {'title': 'Success',
                     'message': 'Question updated successfully.',

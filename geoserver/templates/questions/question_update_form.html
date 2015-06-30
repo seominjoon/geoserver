@@ -4,7 +4,10 @@
 {% block title %}Update a question{% endblock %}
 {% block content %}
 <form action="" method="post">{% csrf_token %}
-	{{ form.as_p }}
+	{{ question_form.as_p }}
+	{% for choice_form in choice_forms %}
+		{{  choice_form.as_p }}
+	{% endfor %}
 	<input type="submit" value="Update"/>
 </form>
 {% endblock %}

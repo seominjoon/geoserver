@@ -1,7 +1,7 @@
 import re
 from django.core.urlresolvers import reverse
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import View, ListView
 from questions.models import Question, Sentence, QuestionTag, Choice
 from questions.views import _get_queries, _filter_questions, QuestionListView
@@ -18,7 +18,7 @@ class SentenceParseAnnotateView(View):
         else:
             annotations = ""
         form = SentenceParseForm(initial={'parses': annotations})
-        data = {'sentence': sentence, 'form': form, 'next': ''}
+        data = {'sentence': sentence, 'form': form, 'next': request.META['HTTP_REFERER']}
         return render(request, 'semantics/sentenceparse_annotate.html', data)
 
     def post(self, request, question_pk, sentence_index):
@@ -48,7 +48,7 @@ class SentenceParseAnnotateView(View):
                     sentence_annotation.save()
 
                 if len(question.sentences.all()) - 1 == sentence.index:
-                    pk_list = [q.pk for q in Question.objects.filter(tags__word="unannotated")]
+                    pk_list = [q.pk for q in Question.objects.all()]
                     if QuestionTag.objects.filter(word="unannotated").exists() and QuestionTag.objects.filter(word="annotated").exists():
                         unannotated = QuestionTag.objects.get(word="unannotated")
                         annotated = QuestionTag.objects.get(word="annotated")
@@ -60,6 +60,8 @@ class SentenceParseAnnotateView(View):
                 else:
                     next_question_pk = question_pk
                     next_sentence_index = "%d" % (int(sentence_index) + 1)
+
+                return redirect(request.POST['next'])
 
                 kwargs = {'question_pk': next_question_pk, 'sentence_index': next_sentence_index}
                 data = {'title': 'Success',
@@ -132,7 +134,7 @@ class ChoiceAnnotateView(View):
                 choice_annotation.save()
 
                 if len(question.choices.all()) - 1 == choice.number:
-                    pk_list = [q.pk for q in Question.objects.filter(tags__word="unannotated")]
+                    pk_list = [q.pk for q in Question.objects.all()]
                     next_question_pk = pk_list[pk_list.index(int(question_pk)) + 1]
                     next_choice_number = 0
                 else:

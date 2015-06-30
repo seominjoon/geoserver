@@ -51,6 +51,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+
 ROOT_URLCONF = 'geoserver.urls.local'
 
 WSGI_APPLICATION = 'geoserver.wsgi.application'

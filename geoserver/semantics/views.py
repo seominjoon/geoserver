@@ -26,7 +26,7 @@ class SentenceParseAnnotateView(View):
         sentence = Sentence.objects.get(question=question, index=sentence_index)
         form = SentenceParseForm(request.POST)
         if form.is_valid():
-            lines = form.cleaned_data['parses'].split('\r\n')
+            lines = form.cleaned_data['parses'].lstrip().rstrip().split('\r\n')
             valid = True
             invalid_lines = []
             for index, line in enumerate(lines):
@@ -38,37 +38,23 @@ class SentenceParseAnnotateView(View):
                 """
 
             if valid:
+                for sentence_annotation in sentence.semantic_parses.all():
+                    sentence_annotation.delete()
+
                 for index, line in enumerate(lines):
-                    line = line.rstrip().lstrip()
-                    if SentenceAnnotation.objects.filter(sentence=sentence, number=index).exists():
-                        sentence_annotation = SentenceAnnotation.objects.get(sentence=sentence, number=index)
-                        sentence_annotation.annotation = line
-                    else:
-                        sentence_annotation = SentenceAnnotation(sentence=sentence, number=index, parse=line)
+                    sentence_annotation = SentenceAnnotation(sentence=sentence, number=index, parse=line)
                     sentence_annotation.save()
 
                 if len(question.sentences.all()) - 1 == sentence.index:
-                    pk_list = [q.pk for q in Question.objects.all()]
                     if QuestionTag.objects.filter(word="unannotated").exists() and QuestionTag.objects.filter(word="annotated").exists():
                         unannotated = QuestionTag.objects.get(word="unannotated")
                         annotated = QuestionTag.objects.get(word="annotated")
                         question.tags.remove(unannotated)
                         question.tags.add(annotated)
                         question.save()
-                    next_question_pk = pk_list[pk_list.index(int(question_pk)) + 1]
-                    next_sentence_index = 0
-                else:
-                    next_question_pk = question_pk
-                    next_sentence_index = "%d" % (int(sentence_index) + 1)
 
                 return redirect(request.POST['next'])
 
-                kwargs = {'question_pk': next_question_pk, 'sentence_index': next_sentence_index}
-                data = {'title': 'Success',
-                        'message': 'Semantic parses annotated successfully.',
-                        'link': reverse('semantics-annotate', kwargs=kwargs),
-                        'linkdes': 'Annotate the next sentence.'}
-                return render(request, 'result.html', data)
 
         data = {'title': 'Failed',
                 'message': "%r" % (invalid_lines),

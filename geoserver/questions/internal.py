@@ -48,17 +48,13 @@ def delete_all():
 
 
 def reset_question(question):
-    for choice in question.choices.all():
-        for choice_word in choice.words.all():
-            choice_word.delete()
-        populate_choice_words(choice)
-
-    for sentence in question.sentences.all():
-        for sentence_word in sentence.words.all():
-            sentence_word.delete()
-        sentence.delete()
-
     populate_sentences(question)
+    for choice_word in ChoiceWord.objects.filter(choice__question=question):
+        choice_word.delete()
+    for sentence_word in SentenceWord.objects.filter(sentence__question=question):
+        sentence_word.delete()
+    for choice in question.choices.all():
+        populate_choice_words(choice)
     for sentence in question.sentences.all():
         populate_sentence_words(sentence)
 
@@ -78,7 +74,10 @@ def populate_choice_words(choice):
 def populate_sentences(question):
     sentences = prep.paragraph_to_sentences(question.text)
     for index, text in sentences.iteritems():
-        sentence = Sentence(index=index, text=text, question=question)
+        if Sentence.objects.filter(index=index, question=question).exists():
+            sentence = Sentence.objects.get(index=index, question=question)
+        else:
+            sentence = Sentence(index=index, text=text, question=question)
         sentence.save()
 
 def populate_sentence_words(sentence):

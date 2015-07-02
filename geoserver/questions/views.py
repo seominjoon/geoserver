@@ -3,7 +3,7 @@ import re
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse
 from django.http.response import JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DeleteView, CreateView, UpdateView, \
     View, DetailView
 
@@ -176,7 +176,7 @@ class QuestionDownloadView(View):
         else:
             p, t = _get_queries(query)
             objects = _filter_questions(p, t)
-        data = [question.repr(request) for question in objects]
+        data = [question.dict(request) for question in objects]
         return JsonResponse(data, safe=False)
 
 
@@ -186,11 +186,11 @@ class QuestionUpdateView(View):
         question_form = QuestionForm(prefix=slug, instance=question)
         choice_forms = [ChoiceLimitedForm(prefix=choice.pk, instance=choice)
                         for choice in Choice.objects.filter(question=question)]
-        data = {'title': 'Update a question', 'question_form': question_form, 'choice_forms': choice_forms}
+        data = {'title': 'Update a question', 'question_form': question_form, 'choice_forms': choice_forms,
+                'next': request.META['HTTP_REFERER']}
         return render(request, 'questions/question_update_form.html', data)
 
     def post(self, request, slug):
-        print(request.POST['next'])
         question = Question.objects.get(pk=slug)
         question_form = QuestionForm(request.POST, prefix=slug, instance=question)
         choice_forms = [ChoiceLimitedForm(request.POST, prefix=choice.pk, instance=choice)
@@ -200,13 +200,7 @@ class QuestionUpdateView(View):
             for form in choice_forms: form.save()
 
             reset_question(question)
-
-            kwargs = {'query': 'all'}
-            data = {'title': 'Success',
-                    'message': 'Question updated successfully.',
-                    'link': reverse('questions-list', kwargs=kwargs),
-                    'linkdes': 'Go to the question list page',}
-            return render(request, 'result.html', data)
+            return redirect(request.POST['next'])
         else:
             kwargs = {'slug': slug}
             data = {'title': 'Failure',

@@ -8,6 +8,7 @@
 	{% for choice_form in choice_forms %}
 		{{  choice_form.as_p }}
 	{% endfor %}
+	<input type="hidden" name="next" value="{{ next }}" />
 	<input type="submit" value="Update"/>
 </form>
 {% endblock %}

@@ -33,7 +33,8 @@
                         </ul>
                     </td>
                     <td>
-                        <a class="annotate" href="{% url 'semantics-annotate' question.pk sentence.index %}">Annotate</a>
+                        <a class="modify" href="{% url 'semantics-annotate' question.pk sentence.index %}">Annotate</a>
+                        <a class="modify" href="{% url 'questions-update' question.pk %}">Update</a>
                     </td>
                     </tr>
                 {% endfor %}
@@ -47,7 +48,7 @@
             $(window).scrollTop($.cookie("scroll"));
         }
     });
-    $('a.annotate').click(function() {
+    $('a.modify').click(function() {
         $.cookie("scroll", $(document).scrollTop());
     });
     </script>

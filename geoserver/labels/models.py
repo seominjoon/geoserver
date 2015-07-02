@@ -23,7 +23,7 @@ class Label(models.Model):
         return self.question.__unicode__()
 
 
-    def repr(self):
+    def dict(self):
         label_data = json.loads(self.text)
         return {'question_pk': self.question.pk,
                 'pk': self.pk,

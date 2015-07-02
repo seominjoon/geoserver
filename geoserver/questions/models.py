@@ -105,8 +105,7 @@ class Question(models.Model):
     def get_absolute_url(self):
         return reverse('questions-detail', kwargs={'slug': self.pk})
     
-    def repr(self, request=None):
-        choices = dict([(choice.number,choice.text) for choice in self.choices.all()])
+    def dict(self, request=None):
         if request is None:
             diagram_url = self.diagram.url
         else:
@@ -118,5 +117,6 @@ class Question(models.Model):
                 'has_choices': self.has_choices,
                 'valid': self.valid,
                 'answer': self.answer,
-                'choices': choices,
+                'choice_words': {choice.number: {word.index: word.text for word in choice.words.all()}
+                                 for choice in self.choices.all()}
                 }

@@ -113,7 +113,7 @@ class LabelDownloadView(View):
 
         objects = sorted(objects, key=lambda obj: obj.question.pk)
 
-        data = [label.repr() for label in objects]
+        data = [label.dict() for label in objects]
         return JsonResponse(data, safe=False)
 
 

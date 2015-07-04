@@ -76,6 +76,7 @@ def populate_sentences(question):
     for index, text in sentences.iteritems():
         if Sentence.objects.filter(index=index, question=question).exists():
             sentence = Sentence.objects.get(index=index, question=question)
+            sentence.text = text
         else:
             sentence = Sentence(index=index, text=text, question=question)
         sentence.save()

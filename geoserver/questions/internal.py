@@ -53,10 +53,16 @@ def reset_question(question):
         choice_word.delete()
     for sentence_word in SentenceWord.objects.filter(sentence__question=question):
         sentence_word.delete()
+    for choice_expression in ChoiceExpression.objects.filter(choice__question=question):
+        choice_expression.delete()
+    for sentence_expression in SentenceExpression.objects.filter(sentence__question=question):
+        sentence_expression.delete()
+
     for choice in question.choices.all():
         populate_choice_words(choice)
     for sentence in question.sentences.all():
         populate_sentence_words(sentence)
+
 
 
 def populate_choice_words(choice):

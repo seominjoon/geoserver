@@ -5,6 +5,7 @@ from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render
 from django.views.generic import View, ListView, DeleteView, DetailView
 from geosolver.utils.prep import save_image, open_image_from_file
+import re
 from labels.forms import LabelForm
 from labels.geosolver_interface import get_labeled_image
 from labels.models import Label
@@ -103,16 +104,11 @@ class LabelDownloadView(View):
 
         if query == 'all':
             objects = Label.objects.all()
+        elif re.match(r'^\d+$', query):
+            objects = [Label.objects.get(question__pk=int(query))]
         else:
-            try:
-                int(query)
-            except:
-                raise Exception('query must be an integer.')
-            question = Question.objects.get(pk=int(query))
-            objects = Label.objects.filter(question=question)
-
-        objects = sorted(objects, key=lambda obj: obj.question.pk)
-
+            p, t = _get_queries(query)
+            objects = Label.objects.filter(question=_filter_questions(p, t))
         data = [label.dict() for label in objects]
         return JsonResponse(data, safe=False)
 

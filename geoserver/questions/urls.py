@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     url(r'^update/all/$', views.QuestionUpdateAllView.as_view(), name='questions-update_all'),
     url(r'^update/(?P<slug>\d+)/$', views.QuestionUpdateView.as_view(), name='questions-update'),
     url(r'^detail/(?P<slug>\d+)/$', views.QuestionDetailView.as_view(), name='questions-detail'),
+    url(r'^createtag/$', views.TagCreateView.as_view(), name='questions-tagcreate'),
 )

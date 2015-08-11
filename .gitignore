@@ -4,3 +4,5 @@ geoserver/static/*
 geoserver/media/*
 geoserver/*/migrations/*
 .idea/*
+*.json
+*.tar.gz

@@ -6,13 +6,13 @@ Created on Jul 22, 2014
 
 from django.forms import ModelForm
 
-from questions.models import Question, Choice
+from questions.models import Question, Choice, QuestionTag
 
 
 class QuestionForm(ModelForm):
     class Meta:
         model = Question
-        fields = ['text', 'diagram', 'has_choices', 'valid', 'answer']
+        fields = ['text', 'diagram', 'has_choices', 'valid', 'answer', 'tags']
 
     def __init__(self, *args, **kwargs):
         super(QuestionForm, self).__init__(*args, **kwargs)
@@ -27,3 +27,8 @@ class ChoiceLimitedForm(ModelForm):
     class Meta:
         model = Choice
         fields = ['text']
+
+class TagForm(ModelForm):
+    class Meta:
+        model = QuestionTag
+        fields = ['word']

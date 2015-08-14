@@ -106,11 +106,7 @@ class QuestionUploadView(View):
             if request.POST['html'] == 'false':
                 return HttpResponse(str(this.pk))
             else:
-                data = {'title': 'Success',
-                        'message': 'Question uploaded successfully.',
-                        'link': reverse('questions-list'),
-                        'linkdes': 'Go to question list page.'}
-                return render(request, 'result.html', data)
+                return redirect(request.POST['next'])
         else:
             # Do nothing
             
@@ -126,7 +122,8 @@ class QuestionUploadView(View):
 
     def get(self, request):
         form = QuestionForm()
-        data = {'form': form, 'title':'Upload a question'}
+        data = {'title': 'upload a question', 'form': form,
+                'next': request.META['HTTP_REFERER']}
         return  render(request, 'upload_form.html', data)
 
 class ChoiceUploadView(View):

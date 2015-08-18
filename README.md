@@ -1,5 +1,6 @@
 # GeoServer
-Web framework for GeoSolver
+Web framework for GeoSolver. Currently, you have to use this to access our geometry question dataset. 
+We will release more organized "raw" data soon.
 
 ## Local server hosting: general instruction
 1. Make sure you have Python 2 (tested on 2.7.6) and MySQL installed.

@@ -123,5 +123,5 @@ class Question(models.Model):
                                          for sentence in self.sentences.all()},
                 'choice_expressions': {choice.number: {expr.index: expr.text for expr in choice.expressions.all()}
                                        for choice in self.choices.all()},
-                'answer': self.answer,
+                'choices': {choice.number: choice.text for choice in self.choices.all()},
                 }

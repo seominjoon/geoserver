@@ -34,7 +34,7 @@ function drawAnnotations() {
 imageObj.onload = function() {
     context.drawImage(imageObj, 0, 0);
     drawAnnotations();
-}
+};
 
 $(document).ready(function() {
     $('#myCanvas').click(function(e) {
@@ -59,7 +59,12 @@ $('#input_type').keypress(function (e) {
 });
 
 $('#button_add').click(function(e) {
-    arr = JSON.parse($('#id_text').val());
+    var text = $('#id_text').val();
+    if (text === "") {
+        arr = [];
+    } else {
+        arr = JSON.parse(text);
+    }
     var dict = {'x':Math.round(x), 'y':Math.round(y), 'label': $('#input_label').val(), 'type': $('#input_type').val()};
     arr.push(dict);
     drawAnnotations();

@@ -41,12 +41,12 @@ We will release more organized "raw" data soon.
 ## Loading dumped data
 Now that you have server running, you want to load data on it (otherwise you will have to upload every question yourself!).
 
-1. Download the media folder, which contains all the images: [media.tar.gz](https://s3-us-west-2.amazonaws.com/geosolver-server/dump/a685bed60d23f1684a7344d665fd5b421d2e5aa6/media.tar.gz)
+1. Download the media folder, which contains all the images: [media.tar.gz](https://s3-us-west-2.amazonaws.com/geosolver-server/dump/68bd697ca57cdac1f2738a8d7e468fdccd7e5545/media.tar.gz)
 2. Unzip the media folder in GeoServer/geoserver (so that you have GeoServer/geoserver/media folder).
 3. Download json files, which contain text data and links to the images:
-[questions.json](https://s3-us-west-2.amazonaws.com/geosolver-server/dump/a685bed60d23f1684a7344d665fd5b421d2e5aa6/questions.json)
-[labels.json](https://s3-us-west-2.amazonaws.com/geosolver-server/dump/a685bed60d23f1684a7344d665fd5b421d2e5aa6/labels.json)
-[semantics.json](https://s3-us-west-2.amazonaws.com/geosolver-server/dump/a685bed60d23f1684a7344d665fd5b421d2e5aa6/semantics.json)
+[questions.json](https://s3-us-west-2.amazonaws.com/geosolver-server/dump/68bd697ca57cdac1f2738a8d7e468fdccd7e5545/questions.json)
+[labels.json](https://s3-us-west-2.amazonaws.com/geosolver-server/dump/68bd697ca57cdac1f2738a8d7e468fdccd7e5545/labels.json)
+[semantics.json](https://s3-us-west-2.amazonaws.com/geosolver-server/dump/68bd697ca57cdac1f2738a8d7e468fdccd7e5545/semantics.json)
 4. Text data can be loaded with the json files in GeoServer/geoserver:
 
   ```bash

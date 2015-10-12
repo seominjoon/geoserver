@@ -1,6 +1,6 @@
 # GeoServer
-Web framework for GeoSolver. Currently, you have to use this to access our geometry question dataset. 
-We will release more organized "raw" data soon.
+Web framework for GeoSolver. Currently, you can use this to access our geometry question dataset. 
+Raw data in JSON format is available [here](seominjoon.github.io/geosolver).
 
 ## Local server hosting: general instruction
 1. Make sure you have Python 2 (tested on 2.7.6) and MySQL installed.
@@ -57,6 +57,36 @@ Now that you have server running, you want to load data on it (otherwise you wil
   
 4. Now you should be able to see questions when accessing `http://localhost:8000/questions/list/all`.
 
+## Manually adding data
+If you are adding your own data, see the following instructions.
+
+### Common (training or testing)
+1. Add question: Go to `http://localhost:8000/questions/upload`. Check "HasChoices" if the question is a multiple-choice question. Answer is always numeric. if "HasChoices", enter 1 for first choice, 2 for second choice, and so on.
+2. Add choices: Go to `http://localhost:8000/questions/upload/choice`. For number, 1 means it is the first choice, 2 means it is the second choice, and so on.
+3. Try to find your new question in `http://localhost:8000/quetions/list/all`.
+4. You can also use `geosolver.database.geoserver_interface.upload_question` for automating these uploads with text files.
+
+### Training
+Training questions require the logical forms annotated. Go to `http://localhost:8000/semantics/list/all/`. 
+Click "Annotate" on the Action column (right) to annotate/update the logical forms of existing questions.
+
+### Testing
+Testing questions require the OCR labels annotated. Go to `http://localhost:8000/labels/list/all/`. 
+Click "Annotate" on the Action column (right) to annotate/update the labels of existing questions. 
+The "Text" field shows the labels recorded for the selected question, where "type" refers to the entity type of the label.
+There are several possible types:
+1. "point": label for point
+2. "line": label for line (e.g. l)
+3. "length line": label for length of line (e.g. 4, x)
+4. "angle": label for angle
+5. "angle angle": label for measure of angle (e.g. 90 degree sign, 40 degrees, x degrees, etc.)
+6. "angle arc": label for the measure of the angle of arc
+Distictions among #3-6 could be confusing, and it will be probably better to take a look at existing labels to learn about them.
+
+In order to record, you can either directly manipulate the JSON in the "Text" field, or: 1. click a label on the image. 2. type in the label in English in the first box. 3. type in the "entity type" in the second box. 4. Click "Click". Then the label will be automatically added to the JSON. 
+
+When you are done annotating everything, click "Upload".
+
 ## Ubuntu helps
 * To meet the python and MySQL requirements, run:
   
@@ -83,3 +113,4 @@ Now that you have server running, you want to load data on it (otherwise you wil
   4. replace YOURNEWPASSWORD with your new password: `UPDATE user SET Password=PASSWORD('YOURNEWPASSWORD') WHERE User='root'; FLUSH PRIVILEGES; exit;`
   5. kill the temporary server: `sudo killall -9 mysqld ?`
   6. start the normal server: `sudo service mysql start`
+

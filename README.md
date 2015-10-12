@@ -57,6 +57,18 @@ Now that you have server running, you want to load data on it (otherwise you wil
   
 4. Now you should be able to see questions when accessing `http://localhost:8000/questions/list/all`.
 
+## Tags
+- aaai: 67 training high school questions from AAAI 2014 paper
+- practice: 64 practice SAT questions from EMNLP 2015 paper
+- official: 55 official SAT questions from EMNLP 2015 paper
+- all: everything in the dataset
+
+If you want to look at TAG questions, go to `http://localhost:8000/questions/list/TAG`. (e.g. `http://localhost:8000/questions/list/practice`). 
+
+If you want to look at both practice and official questions, go to `http://localhost:8000/questions/list/practice+official`.
+
+if you want to look at questions by their ids: `http://localhost:8000/questions/list/963+968+969/`
+
 ## Manually adding data
 If you are adding your own data, see the following instructions.
 
@@ -65,6 +77,8 @@ If you are adding your own data, see the following instructions.
 2. Add choices: Go to `http://localhost:8000/questions/upload/choice`. For number, 1 means it is the first choice, 2 means it is the second choice, and so on.
 3. Try to find your new question in `http://localhost:8000/quetions/list/all`.
 4. You can also use `geosolver.database.geoserver_interface.upload_question` for automating these uploads with text files.
+
+Note that there are a few conventions for writing equations in text. For special characters such as "pi" or "degree", use `\pi` and `\degree`. For now, you need to explicitly include `*` whenever there is multiplication betwee two numbers or variables. Use `/` for division. We advise you to look at existing questions (`questions/list/all`) for reference. You can also view/edit `geosolver.expression.expression_parser` (note that currently our expression parser is based on deterministic CFG). 
 
 ### Training
 Training questions require the logical forms annotated. Go to `http://localhost:8000/semantics/list/all/`. 

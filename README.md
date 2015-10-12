@@ -75,6 +75,7 @@ Testing questions require the OCR labels annotated. Go to `http://localhost:8000
 Click "Annotate" on the Action column (right) to annotate/update the labels of existing questions. 
 The "Text" field shows the labels recorded for the selected question, where "type" refers to the entity type of the label.
 There are several possible types:
+
 1. "point": label for point
 2. "line": label for line (e.g. l)
 3. "length line": label for length of line (e.g. 4, x)

@@ -1,6 +1,6 @@
 # GeoServer
 Web framework for GeoSolver. Currently, you can use this to access our geometry question dataset. 
-Raw data in JSON format is available [here](seominjoon.github.io/geosolver).
+Raw data in JSON format is available [here](http://seominjoon.github.io/geosolver).
 
 ## Local server hosting: general instruction
 1. Make sure you have Python 2 (tested on 2.7.6) and MySQL installed.

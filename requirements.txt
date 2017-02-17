@@ -1,5 +1,4 @@
-MySQL-python=1.2.5
-unipath=1.0
+unipath==1.0
 django-storages
 boto
 jsonfield
@@ -13,8 +12,8 @@ inflect
 pyparsing
 matplotlib
 pydot2
-mysql-python
-django=1.7
+mysql-python==1.2.5
+django==1.7
 django-picklefield
 jsonfield
 django-storages

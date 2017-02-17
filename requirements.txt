@@ -12,7 +12,7 @@ inflect
 pyparsing
 matplotlib
 pydot2
-mysql-python
+mysql-python==1.2.5
 django==1.7
 django-picklefield
 jsonfield

@@ -20,6 +20,5 @@ django-storages
 boto
 django-modeldict
 pillow
-unipath
 beautifulsoup4
 requests

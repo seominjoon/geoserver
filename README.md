@@ -27,6 +27,8 @@ To start server, run `sudo /etc/init.d/mysql start`, and to enter console, `sudo
   ```
   
 6. Install OpenCV 3 (tested on 3.0.0). Make sure python wrappers are accessible via `$PYTHONPATH`.
+ Refer to this: `https://www.learnopencv.com/install-opencv-3-on-yosemite-osx-10-10-x/`
+
 7. Change directory to `GeoServer/geoserver`. 
 8. Type on the terminal: 
   ```bash

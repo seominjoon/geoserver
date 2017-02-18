@@ -1,6 +1,5 @@
 unipath==1.0
 django-storages
-boto
 jsonfield
 numpy
 scipy

@@ -20,3 +20,5 @@ django-modeldict
 pillow
 beautifulsoup4
 requests
+algopy
+pyipopt

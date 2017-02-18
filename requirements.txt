@@ -1,3 +1,4 @@
+setuptools
 unipath==1.0
 django-storages
 jsonfield

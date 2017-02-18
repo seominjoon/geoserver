@@ -3,10 +3,16 @@ Web framework for GeoSolver. Currently, you can use this to access our geometry 
 Raw data in JSON format is available [here](http://seominjoon.github.io/geosolver).
 
 ## Local server hosting: general instruction
-1. Make sure you have Python 2 (tested on 2.7.6) and MySQL installed.
-2. Clone this repository, as well as `geosolver` and `equationtree`. They have to be added to the `$PYTHONPATH`. 
-3. Make sure the MySQL root acess credentials agrees with `DATABASES` in `GeoServer/geoserver/geoserver/settings/local.py`.
-4. Log in to MySQL server and create a database `geodb` in MySQL: 
+1. Make sure you have Python 2 (tested on 2.7.6).
+2. Install mysql dependencies:
+```
+sudo apt-get install mysql-server libmysqlclient-dev
+```
+To start server, run `sudo /etc/init.d/mysql start`, and to enter console, `sudo mysql -u root -p`.
+
+3. Clone this repository, as well as `geosolver` and `equationtree`. They have to be added to the `$PYTHONPATH`. 
+4. Make sure the MySQL root acess credentials agrees with `DATABASES` in `GeoServer/geoserver/geoserver/settings/local.py`.
+5. Log in to MySQL server and create a database `geodb` in MySQL: 
 
   ```mysql
   create database geodb;
@@ -14,10 +20,10 @@ Raw data in JSON format is available [here](http://seominjoon.github.io/geosolve
   
   If you already have `geodb`, make sure to drop it before creating it (by `drop database geodb`), or come up with a new name (e.g. `geodb2`) and update the database name in `GeoServer/geoserver/geoserver/settings/local.py`.
   
-5. Install all required packages for the server by typing on the terminal: 
+6. Install all required packages for the server by typing on the terminal: 
   
   ```bash
-  pip install numpy scipy scikit-learn sympy networkx nltk inflect pyparsing matplotlib pydot2 mysql-python django django-picklefield jsonfield django-storages boto django-modeldict pillow unipath beautifulsoup4 requests
+  pip install -r requirements.txt
   ```
   
 6. Install OpenCV 3 (tested on 3.0.0). Make sure python wrappers are accessible via `$PYTHONPATH`.
